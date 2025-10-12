@@ -26,9 +26,10 @@ export function PatternUpload({ onPatternParsed }: PatternUploadProps) {
       ALLOWED_MIME_TYPES.includes(file.type);
 
     if (!isValidType) {
-      alert("PDF 파일만 업로드 가능합니다.");
+      toast.error("PDF 파일만 업로드 가능합니다.");
       return false;
     }
+    return true;
   };
 
   const handleFile = (file: File) => {
