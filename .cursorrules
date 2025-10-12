@@ -1,0 +1,50 @@
+# 프로젝트 컨텍스트
+
+## 문서 참조
+작업 시 다음 문서들을 참고하세요:
+- `docs/PRD.md` - 전체 제품 요구사항
+- `docs/FEATURES.md` - 기능 명세 및 예시
+- `docs/DESIGN_SYSTEM.md` - 디자인 규칙
+- `docs/USER_FLOW.md` - 사용자 플로우
+- `docs/TECH_STACK.md` - 기술 스택 상세
+- `TASKS.md` - 작업 체크리스트
+
+## 기술 스택
+- Next.js 15 (App Router)
+- TypeScript
+- Tailwind CSS
+- pnpm
+- Biome (린팅/포매팅)
+- shadcn/ui (UI 컴포넌트)
+- next-themes (다크모드)
+
+## 코딩 스타일
+- Biome 규칙 준수
+- 함수형 컴포넌트 사용
+- TypeScript strict mode
+- 명확한 타입 정의
+- shadcn/ui 컴포넌트 활용
+
+## 네이밍 컨벤션
+- 컴포넌트: PascalCase (예: PatternViewer)
+- shadcn 컴포넌트: kebab-case (예: button.tsx) - 건드리지 않음
+- 파일명: kebab-case (예: pattern-analyzer.ts)
+- 변수/함수: camelCase
+- 타입/인터페이스: PascalCase
+
+## 우선순위
+P0: 파일 업로드, 사이즈 분리, 체크박스, 다크모드
+P1: 진행률, 데이터 저장
+P2: 에러 핸들링, 최적화
+
+## shadcn/ui 사용 가이드
+- components/ui 폴더의 파일은 직접 수정 금지
+- 커스터마이징이 필요하면 래퍼 컴포넌트 생성
+
+## 작업 시 체크사항
+1. docs/FEATURES.md의 요구사항 충족
+2. docs/DESIGN_SYSTEM.md의 디자인 규칙 준수
+3. docs/USER_FLOW.md의 플로우 따르기
+4. 다크모드 지원
+5. 반응형 디자인
+6. 타입 안정성
