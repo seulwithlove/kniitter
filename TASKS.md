@@ -19,14 +19,12 @@
 - [x] Toast 알림 (Toaster 추가)
 
 ## Phase 3: 파싱 로직 ✅
-- [x] 텍스트 파일 파서 (text-parser.ts)
-- [x] PDF 파서 (pdf-parser.ts, pdf-parse 라이브러리)
-- [x] DOCX 파서 (docx-parser.ts, mammoth 라이브러리)
-- [x] 사이즈 패턴 인식 로직 (size-pattern-recognizer.ts)
-- [x] 단계 분리 로직 (step-separator.ts)
-- [x] 통합 파일 파서 서비스 (file-parser.ts)
-- [x] PatternUpload 컴포넌트에 파싱 연동
-- [x] 메인 페이지에 전체 플로우 연결
+- [x] PDF 파서 (pdf-parser.ts, pdf2json 라이브러리)
+- [ ] 사이즈 패턴 인식 로직 (size-pattern-recognizer.ts)
+- [ ] 단계 분리 로직 (step-separator.ts)
+- [ ] 통합 파일 파서 서비스 (file-parser.ts)
+- [ ] PatternUpload 컴포넌트에 파싱 연동
+- [ ] 메인 페이지에 전체 플로우 연결
 
 ## Phase 4: 상태 관리
 - [ ] 로컬 스토리지 연동

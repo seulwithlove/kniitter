@@ -160,6 +160,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               asChild
               className="data-[slot=sidebar-menu-button]:!p-1.5"
             >
+              {/** biome-ignore lint/a11y/useValidAnchor: sample */}
               <a href="#">
                 <IconInnerShadowTop className="!size-5" />
                 <span className="font-semibold text-base">Acme Inc.</span>
