@@ -1,101 +1,63 @@
 "use client";
 
-import { useState } from "react";
-import { PatternUpload } from "@/components/pattern-upload";
-import { PatternViewer } from "@/components/pattern-viewer";
-import { ProgressBar } from "@/components/progress-bar";
-import { SizeSelector } from "@/components/size-selector";
+import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { applySizeToPattern } from "@/lib/utils/size-applier";
-import type { ParsedPattern } from "@/types/pattern";
+import { Input } from "@/components/ui/input";
+import ProjectBox from "./projectbox/page";
+
+const mockData = [
+  {
+    id: 0,
+    content: "muffler",
+    isCompleted: true,
+  },
+  {
+    id: 1,
+    content: "socks",
+    isCompleted: false,
+  },
+  {
+    id: 2,
+    content: "cardigan",
+    isCompleted: false,
+  },
+];
 
 export default function Home() {
-  const [parsedPattern, setParsedPattern] = useState<ParsedPattern | null>(
-    null,
-  );
-  const [selectedSizeIndex, setSelectedSizeIndex] = useState(0);
-  const [displayPattern, setDisplayPattern] = useState<ParsedPattern | null>(
-    null,
-  );
-  const [progressCompleted, setProgressCompleted] = useState(0);
-  const [progressTotal, setProgressTotal] = useState(0);
+  const [projects, setProjects] = useState(mockData);
 
-  const handlePatternParsed = (pattern: ParsedPattern) => {
-    setParsedPattern(pattern);
-    setSelectedSizeIndex(0);
-
-    // 첫 번째 사이즈로 패턴 변환
-    const transformed = applySizeToPattern(pattern, 0);
-    setDisplayPattern(transformed);
-  };
-
-  const handleSizeChange = (sizeName: string) => {
-    if (!parsedPattern) return;
-
-    const sizeIndex = parsedPattern.sizes.findIndex((s) => s.name === sizeName);
-    if (sizeIndex === -1) return;
-
-    setSelectedSizeIndex(sizeIndex);
-
-    // 선택된 사이즈로 패턴 변환
-    const transformed = applySizeToPattern(parsedPattern, sizeIndex);
-    setDisplayPattern(transformed);
-  };
-
-  const handleProgressChange = (completed: number, total: number) => {
-    setProgressCompleted(completed);
-    setProgressTotal(total);
-  };
-
-  const handleReset = () => {
-    setParsedPattern(null);
-    setDisplayPattern(null);
-    setSelectedSizeIndex(0);
-    setProgressCompleted(0);
-    setProgressTotal(0);
+  const idRef = useRef(3);
+  const [content, setContent] = useState("");
+  const onCreate = () => {
+    const newProject = {
+      id: idRef.current++,
+      content: content,
+      isCompleted: false,
+    };
+    setProjects((pre) => [newProject, ...pre]);
+    setContent("");
   };
 
   return (
-    <div className="container mx-auto max-w-4xl space-y-6 py-8">
-      {!parsedPattern ? (
-        <PatternUpload onPatternParsed={handlePatternParsed} />
-      ) : (
-        <>
-          {/* 헤더 */}
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="font-bold text-2xl">{parsedPattern.fileName}</h1>
-              <p className="text-muted-foreground text-sm">
-                {parsedPattern.steps.length}개 단계
-              </p>
-            </div>
-            <Button variant="outline" onClick={handleReset}>
-              새 도안 업로드
-            </Button>
-          </div>
+    <div className="mx-auto h-full">
+      <div className="flex h-full w-full flex-col justify-around gap-3 bg-amber-500">
+        <div className="flex flex-1 place-items-center border-2 border-blue-500">
+          <Input
+            placeholder="Name your knit project!"
+            type="text"
+            value={content}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setContent(e.target.value);
+            }}
+          />
+          <Button onClick={onCreate}>+</Button>
+        </div>
 
-          {/* 진행률 */}
-          <ProgressBar completed={progressCompleted} total={progressTotal} />
-
-          {/* 사이즈 선택 */}
-          {parsedPattern.sizes.length > 0 && (
-            <SizeSelector
-              sizes={parsedPattern.sizes}
-              selectedSize={parsedPattern.sizes[selectedSizeIndex]?.name || ""}
-              onSizeChange={handleSizeChange}
-            />
-          )}
-
-          {/* 패턴 뷰어 */}
-          {displayPattern && (
-            <PatternViewer
-              steps={displayPattern.steps}
-              patternId={parsedPattern.fileName}
-              onProgressChange={handleProgressChange}
-            />
-          )}
-        </>
-      )}
+        <div className="flex flex-2 flex-col gap-3 border-2 border-green-400">
+          <div>Ongoing projects</div>
+          <ProjectBox projects={projects} />
+        </div>
+      </div>
     </div>
   );
 }

@@ -39,7 +39,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="container mx-auto flex h-screen flex-col justify-center">
+          <div className="mx-auto flex h-screen flex-col justify-center">
             <header className="mt-3 flex justify-between border-b-1">
               <Link
                 href="/"
