@@ -2,49 +2,44 @@ import { PrismaClient } from "../lib/generated/prisma/client";
 
 const prisma = new PrismaClient();
 
-// sample mbrs TODO: change mbrs based on my tables
-// const mbrs = [
-//   {
-//     email: "indiflex.corp@gmail.com",
-//     nickname: "indiflex",
-//     image: "https://avatars.githubusercontent.com/u/5843964?v=4",
-//     Book: {
-//       create: [
-//         {
-//           title: "IndiFlex Personal Book",
-//           Mark: {
-//             create: {
-//               link: "https://naver.com",
-//               title: "Naver",
-//               descript: "seeding...",
-//             },
-//           },
-//         },
-//       ],
-//     },
-//   },
-//   {
-//     email: "indiflex.sico@gmail.com",
-//     nickname: "시니어코딩",
-//     image:
-//       "https://lh3.googleusercontent.com/a/ACg8ocIXMQz3s5gQdKrno8qArpiiJ3trUHbnVM0gTw58wMDxRa-ljySL=s96-c",
-//   },
-//   {
-//     email: "jeonseongho@naver.com",
-//     nickname: "Jade",
-//     passwd: "$2b$10$zbmpxOaO4jroF9Mmrt2M8u6TWXms1/ncqJysXXOyD69aYqPaf44jG",
-//   },
-// ];
+const projects = [
+  {
+    content: "겨울 스웨터 뜨기",
+    isCompleted: false,
+  },
+  {
+    content: "목도리 만들기",
+    isCompleted: true,
+  },
+  {
+    content: "아기 모자 뜨기",
+    isCompleted: false,
+  },
+  {
+    content: "손뜨개 가방",
+    isCompleted: false,
+  },
+  {
+    content: "니트 양말 한 켤레",
+    isCompleted: true,
+  },
+];
 
 async function main() {
-  for (const mbr of mbrs) {
-    const rs = await prisma.member.upsert({
-      where: { email: mbr.email },
-      update: {},
-      create: { ...mbr },
-    });
-    console.log("🚀 ~ rs:", rs);
-  }
+  console.log("🌱 Starting seed...");
+
+  // 기존 데이터 삭제
+  console.log("🧹 Cleaning existing projects...");
+  await prisma.project.deleteMany();
+
+  // 새 데이터 생성
+  console.log("📦 Creating projects...");
+  const result = await prisma.project.createMany({
+    data: projects,
+  });
+
+  console.log(`✅ Created ${result.count} projects`);
+  console.log("🎉 Seed completed!");
 }
 
 main()
