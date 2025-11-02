@@ -1,6 +1,6 @@
+import io
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-import io
 import pypdf
 
 app = FastAPI()
@@ -32,12 +32,13 @@ async def upload_pdf(file: UploadFile = File(...)):
             text += page.extract_text() + "\n"
 
         return {
-            "filename" : file.filename,
-            "pages" : len(pdf_reader.pages),
-            "text" : text.strip()
+            "filename": file.filename,
+            "pages": len(pdf_reader.pages),
+            "text": text.strip()
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Errors while processing pdf: {str(e)}")
+
 
 @app.get('/')
 async def root():

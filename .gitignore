@@ -47,3 +47,4 @@ next-env.d.ts
 /.vscode
 /public/pdf
 .python-version
+/backend/__pycache__

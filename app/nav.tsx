@@ -4,7 +4,7 @@ import ThemeChanger from "@/components/theme-changer";
 export default function Nav() {
   return (
     <div className="flex items-center gap-5">
-      <ArchiveIcon>{/* <KnitBox /> */}</ArchiveIcon>
+      <ArchiveIcon>{/* <ProjectBox projects={projects} /> */}</ArchiveIcon>
       <ThemeChanger />
     </div>
   );
