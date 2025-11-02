@@ -19,7 +19,7 @@ import {
 
 export type ParsedPdfData = {
   filename: string;
-  pages: number;
+  pages?: number;
   text: string;
 };
 

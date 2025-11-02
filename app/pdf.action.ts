@@ -1,8 +1,7 @@
 "use server";
 
+import { PDFParse } from "pdf-parse";
 import type { ParsedPdfData } from "@/components/pdf-upload";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
 export async function uploadPdfAction(formData: FormData) {
   try {
@@ -13,7 +12,7 @@ export async function uploadPdfAction(formData: FormData) {
     }
 
     // validate file type
-    if (file.type !== "application/pdf") {
+    if (file.type !== "application/pdf" && !file.name.endsWith(".pdf")) {
       return [{ pdf: { errors: ["Only PDF file is available"] } }, null];
     }
 
@@ -25,28 +24,29 @@ export async function uploadPdfAction(formData: FormData) {
       ];
     }
 
-    // upload to FastAPI
-    const uploadFormData = new FormData();
-    uploadFormData.append("file", file);
+    // Convert File to Buffer
+    const arrayBuffer = await file.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
 
-    const response = await fetch(`${API_URL}/upload-pdf`, {
-      method: "POST",
-      body: uploadFormData,
-    });
+    // Parse PDF
+    const parser = new PDFParse({ data: buffer });
+    const result = await parser.getText();
 
-    if (!response.ok) {
-      const error = await response.json();
-      return [{ pdf: { errors: [error.detail || "Fail to upload"] } }, null];
-    }
+    const parsedData: ParsedPdfData = {
+      filename: file.name,
+      // pages: result.numpages || 0,
+      text: result.text.trim(),
+    };
 
-    const data: ParsedPdfData = await response.json();
-    return [null, data];
+    return [null, parsedData];
   } catch (error) {
-    console.error("Upload error:", error);
+    console.error("PDF parsing error:", error);
     return [
       {
         pdf: {
-          errors: [error instanceof Error ? error.message : "Server Errors"],
+          errors: [
+            `PDF parsing failed: ${error instanceof Error ? error.message : "Unknown error"}`,
+          ],
         },
       },
       null,
