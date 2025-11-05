@@ -27,6 +27,8 @@ export type UploadPdfReturn = Promise<
   [null, ParsedPdfData] | [{ pdf?: { errors: string[] } }, null]
 >;
 
+("Promise<(ParsedPdfData | null)[] | ({ pdf: { errors: string[]; }; } | null)[]>");
+
 type PdfUploadProps = {
   uploadPdf?: (formData: FormData) => UploadPdfReturn;
   onSuccess?: (data: ParsedPdfData) => void;
@@ -103,7 +105,7 @@ export default function PdfUploader({ uploadPdf, onSuccess }: PdfUploadProps) {
   };
 
   return (
-    <Card className="w-full">
+    <Card>
       <CardHeader>
         <CardTitle>Upload patterns</CardTitle>
         <CardDescription>Upload PDF patterns (max 10MB)</CardDescription>
@@ -228,6 +230,7 @@ export default function PdfUploader({ uploadPdf, onSuccess }: PdfUploadProps) {
                   {parsedData.text.length}
                 </p>
               </div>
+              <div className="space-y-1 text-sm">{parsedData.text}</div>
             </div>
           )}
         </form>

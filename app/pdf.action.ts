@@ -1,9 +1,9 @@
 "use server";
 
 import { PDFParse } from "pdf-parse";
-import type { ParsedPdfData } from "@/components/pdf-upload";
+import type { ParsedPdfData, UploadPdfReturn } from "@/components/pdf-upload";
 
-export async function uploadPdfAction(formData: FormData) {
+export async function uploadPdfAction(formData: FormData): UploadPdfReturn {
   try {
     const file = formData.get("pdf") as File;
 

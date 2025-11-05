@@ -49,7 +49,7 @@ export default function RootLayout({
               </Link>
               <Nav />
             </header>
-            <main className="flex-1">{children}</main>
+            <main className="flex-1 overflow-auto">{children}</main>
             <footer className="mb-2 text-center">
               &#169; seulwithlove 2025
             </footer>

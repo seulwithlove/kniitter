@@ -1,5 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server";
-import pdf from "pdf-parse";
+
+// import pdf from "pdf-parse"; // ts error: pdf-parse is a CommonJS module and doesn't have a default ESM export
+const pdf = require("pdf-parse");
 
 export async function POST(request: NextRequest) {
   try {
