@@ -39,18 +39,18 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="mx-auto flex h-screen flex-col justify-center">
-            <header className="mt-3 flex justify-between border-b-1">
+          <div className="flex h-screen flex-col">
+            <header className="sticky top-0 z-50 flex justify-between border-b bg-background/95 px-4 py-3 backdrop-blur supports-[backdrop-filter]:bg-background/60">
               <Link
                 href="/"
-                className="flex items-center font-semibold text-3xl tracking-tight"
+                className="flex items-center font-semibold text-2xl tracking-tight"
               >
                 Kniiter
               </Link>
               <Nav />
             </header>
-            <main className="flex-1 overflow-auto">{children}</main>
-            <footer className="mb-2 text-center">
+            <main className="flex-1 overflow-auto px-4 py-4">{children}</main>
+            <footer className="border-t bg-background py-3 text-center text-sm">
               &#169; seulwithlove 2025
             </footer>
           </div>
