@@ -19,6 +19,12 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Kniitter",
   description: "Knit Patterns Reader",
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 1,
+    userScalable: false, // Prevents pinch zoom for app-like feel
+  },
 };
 
 export default function RootLayout({

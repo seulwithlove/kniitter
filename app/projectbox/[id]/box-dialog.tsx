@@ -28,7 +28,7 @@ export default function BoxDialog({
 
         <div className="flex flex-col gap-2">
           <Label htmlFor="content">This project is knitting...</Label>
-          <Input id="contetn" value={project.content} />
+          <Input id="content" value={project.content} />
         </div>
       </DialogContent>
     </Dialog>
