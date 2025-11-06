@@ -4,22 +4,17 @@ const prisma = new PrismaClient();
 
 const projects = [
   {
+    id: 1,
     content: "겨울 스웨터 뜨기",
     isCompleted: false,
   },
   {
+    id: 2,
     content: "목도리 만들기",
     isCompleted: true,
   },
   {
-    content: "아기 모자 뜨기",
-    isCompleted: false,
-  },
-  {
-    content: "손뜨개 가방",
-    isCompleted: false,
-  },
-  {
+    id: 3,
     content: "니트 양말 한 켤레",
     isCompleted: true,
   },

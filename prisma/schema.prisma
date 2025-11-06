@@ -13,6 +13,6 @@ model Project {
   id          Int      @id @default(autoincrement()) @db.UnsignedInt
   createdAt   DateTime @default(now()) @db.Timestamp(0)
   updatedAt   DateTime @default(now()) @updatedAt @db.Timestamp(0)
-  content     String   @db.Text
+  content     String   @db.VarChar(25)
   isCompleted Boolean  @default(false)
 }
