@@ -14,6 +14,19 @@ export async function getProjectsAction() {
   return projects;
 }
 
+export async function getProjectByIdAction(id: number) {
+  const project = await prisma.project.findUnique({
+    where: { id },
+    select: {
+      id: true,
+      name: true,
+      content: true,
+      isCompleted: true,
+    },
+  });
+  return project;
+}
+
 export async function createProjectAction(name: string, content: string) {
   const project = await prisma.project.create({
     data: {
