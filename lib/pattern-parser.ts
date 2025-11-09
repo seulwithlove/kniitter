@@ -1,67 +1,177 @@
-export type PatternSection = {
-  title: string;
-  directions: string[];
+/**
+ * 패턴 파서
+ * PDF에서 추출한 텍스트를 ParsedPattern으로 변환
+ */
+
+export type SizeInfo = {
+  name: string;
+  label: string;
+};
+
+export type SubStep = {
+  order: number;
+  content: string;
+};
+
+export type Step = {
+  order: number;
+  content: string;
+  subSteps?: SubStep[];
 };
 
 export type ParsedPattern = {
-  title: string;
-  sections: PatternSection[];
+  fileName: string;
+  originalText: string;
+  content: string;
+  sizes: {
+    name: string;
+    label: string;
+  }[];
+  steps: {
+    order: number;
+    content: string;
+    subSteps?: {
+      order: number;
+      content: string;
+    }[];
+  }[];
 };
 
-export function parsePatternContent(content: string): ParsedPattern {
-  const lines = content
-    .split("\n")
-    .map((line) => line.trim())
-    .filter((line) => line.length > 0);
+/**
+ * 텍스트에서 사이즈 패턴을 감지합니다.
+ */
+function detectSizes(text: string): SizeInfo[] {
+  // 패턴: 숫자 (숫자) 숫자 (숫자)
+  const numberPattern = /(\d+)\s*\((\d+)\)(?:\s+(\d+)\s*\((\d+)\))?/;
+  const match = text.match(numberPattern);
 
-  if (lines.length === 0) {
-    return {
-      title: "Untitled Pattern",
-      sections: [],
-    };
+  if (match) {
+    const numbers = match.slice(1).filter(Boolean);
+    const defaultLabels = ["S", "M", "L", "XL"];
+
+    return numbers.map((num, index) => ({
+      name: defaultLabels[index] || `Size${index + 1}`,
+      label: `${defaultLabels[index] || `Size${index + 1}`} (${num})`,
+    }));
   }
 
-  const title = lines[0];
-  const sections: PatternSection[] = [];
-  let currentSection: PatternSection | null = null;
+  // 기본값
+  return [
+    { name: "S", label: "S" },
+    { name: "M", label: "M" },
+    { name: "L", label: "L" },
+    { name: "XL", label: "XL" },
+  ];
+}
 
-  for (let i = 1; i < lines.length; i++) {
-    const line = lines[i];
+/**
+ * 텍스트를 단계별로 분리합니다.
+ */
+function separateSteps(text: string): Step[] {
+  const steps: Step[] = [];
+  const lines = text
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean);
 
-    // Detect section headers (usually shorter, may contain keywords like "Size", "Materials", etc.)
-    // or lines that look like headers (ALL CAPS, short, etc.)
-    const isHeader =
-      line.length < 50 &&
-      (line.toUpperCase() === line ||
-        line.endsWith(":") ||
-        /^(Size|Materials|Gauge|Abbreviations|Instructions|Pattern|Notes)/i.test(
-          line,
-        ));
+  let currentStep: Step | null = null;
+  let stepOrder = 0;
+  let subStepOrder = 0;
 
-    if (isHeader) {
-      // Start a new section
-      if (currentSection) {
-        sections.push(currentSection);
+  for (const line of lines) {
+    // 메인 단계 패턴 감지 (1., ■, 등)
+    const mainStepMatch = line.match(
+      /^(?:(\d+)\.\s+|(\d+)\)\s+|단계\s*(\d+)[:：]\s*|[■□●○]\s+)/,
+    );
+
+    if (mainStepMatch) {
+      if (currentStep) {
+        steps.push(currentStep);
       }
-      currentSection = {
-        title: line.replace(/:$/, ""), // Remove trailing colon if present
-        directions: [],
+
+      stepOrder++;
+      const content = line.replace(
+        /^(?:\d+\.\s+|\d+\)\s+|단계\s*\d+[:：]\s*|[■□●○]\s+)/,
+        "",
+      );
+
+      currentStep = {
+        order: stepOrder,
+        content,
+        subSteps: [],
       };
-    } else if (currentSection) {
-      // Add line to current section as a direction
-      currentSection.directions.push(line);
-    } else {
-      // No section yet, create a default one
-      currentSection = {
-        title: "Instructions",
-        directions: [line],
-      };
+      subStepOrder = 0;
+      continue;
+    }
+
+    // 하위 단계 패턴 감지
+    const subStepMatch = line.match(/^(?:\s+(?:\d+-\d+\.\s+|[-•·]\s+)|\s{2,})/);
+
+    if (subStepMatch && currentStep) {
+      subStepOrder++;
+      const content = line.replace(
+        /^(?:\s+(?:\d+-\d+\.\s+|[-•·]\s+)|\s{2,})/,
+        "",
+      );
+
+      if (content) {
+        currentStep.subSteps = currentStep.subSteps || [];
+        currentStep.subSteps.push({
+          order: subStepOrder,
+          content,
+        });
+      }
+      continue;
+    }
+
+    // 일반 텍스트
+    if (line.length > 0) {
+      if (!currentStep) {
+        stepOrder++;
+        currentStep = {
+          order: stepOrder,
+          content: line,
+          subSteps: [],
+        };
+      } else {
+        currentStep.content += ` ${line}`;
+      }
     }
   }
 
-  if (currentSection) {
-    sections.push(currentSection);
+  if (currentStep) {
+    steps.push(currentStep);
   }
 
-  return { title, sections };
+  // 하위 단계가 없으면 제거
+  return steps.map((step) => {
+    if (!step.subSteps || step.subSteps.length === 0) {
+      const { subSteps, ...rest } = step;
+      return rest;
+    }
+    return step;
+  });
+}
+
+/**
+ * 텍스트를 ParsedPattern으로 변환
+ */
+export function parsePattern(text: string, fileName: string): ParsedPattern {
+  const sizes = detectSizes(text);
+  const steps = separateSteps(text);
+
+  return {
+    fileName,
+    originalText: text,
+    content: text,
+    sizes,
+    steps,
+  };
+}
+
+export function parsePatternContent(
+  text: string,
+  fileName = "Pattern",
+): ParsedPattern {
+  return parsePattern(text, fileName);
 }

@@ -1,96 +1,151 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type { ParsedPattern } from "@/lib/pattern-parser";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-import { Checkbox } from "./ui/checkbox";
-import { Separator } from "./ui/separator";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Separator } from "@/components/ui/separator";
+
+type SubStep = {
+  order: number;
+  content: string;
+};
+
+type Step = {
+  order: number;
+  content: string;
+  subSteps?: SubStep[];
+};
 
 type PatternViewerProps = {
-  pattern: ParsedPattern;
-  projectId: number;
+  steps: Step[];
+  patternId?: string;
+  onProgressChange?: (completed: number, total: number) => void;
 };
 
 export default function PatternViewer({
-  pattern,
-  projectId,
+  steps,
+  patternId = "default",
+  onProgressChange,
 }: PatternViewerProps) {
-  const [checkedItems, setCheckedItems] = useState<Set<string>>(new Set());
+  const [checkedSteps, setCheckedSteps] = useState<Set<string>>(new Set());
 
+  // 로컬 스토리지에서 체크 상태 불러오기
   useEffect(() => {
-    const stored = localStorage.getItem(`pattern-checks-${projectId}`);
-    if (stored) {
+    const saved = localStorage.getItem(`pattern-progress-${patternId}`);
+    if (saved) {
       try {
-        const parsed = JSON.parse(stored);
-        setCheckedItems(new Set(parsed));
-      } catch (e) {
-        console.log("Failed to parse stored checks: ", e);
+        const parsed = JSON.parse(saved);
+        setCheckedSteps(new Set(parsed));
+      } catch (error) {
+        console.error("Failed to parse saved progress:", error);
       }
     }
-  }, [projectId]);
+  }, [patternId]);
 
-  const handleCheck = (itemId: string, checked: boolean) => {
-    setCheckedItems((prev) => {
-      const newSet = new Set(prev);
-      if (checked) {
-        newSet.add(itemId);
-      } else {
-        newSet.delete(itemId);
-      }
-      localStorage.setItem(
-        `pattern-checks-${projectId}`,
-        JSON.stringify([...newSet]),
+  // 체크 상태 변경 시 로컬 스토리지에 저장
+  useEffect(() => {
+    localStorage.setItem(
+      `pattern-progress-${patternId}`,
+      JSON.stringify(Array.from(checkedSteps)),
+    );
+
+    // 진행률 업데이트
+    if (onProgressChange) {
+      const totalSteps = steps.reduce(
+        (acc, step) => acc + 1 + (step.subSteps?.length || 0),
+        0,
       );
+      onProgressChange(checkedSteps.size, totalSteps);
+    }
+  }, [checkedSteps, patternId, steps, onProgressChange]);
+
+  const handleCheck = (stepId: string) => {
+    setCheckedSteps((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(stepId)) {
+        newSet.delete(stepId);
+      } else {
+        newSet.add(stepId);
+      }
       return newSet;
     });
   };
-  return (
-    <div className="container mx-auto max-w-4xl space-y-6 p-6">
-      {/* Main Title */}
-      <div className="space-y-2 text-center">
-        <h1 className="font-bold text-3xl">{pattern.title}</h1>
-        <Separator className="my-4" />
-      </div>
 
-      {/* Sections */}
-      <div className="space-y-6">
-        {pattern.sections.map((section, sectionIdx) => (
-          <Card key={sectionIdx}>
-            <CardHeader>
-              <CardTitle className="text-xl">{section.title}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                {section.directions.map((direction, dirIdx) => {
-                  const itemId = `${sectionIdx}-${dirIdx}`;
-                  return (
-                    <div key={itemId} className="flex items-start gap-3">
-                      <Checkbox
-                        id={itemId}
-                        checked={checkedItems.has(itemId)}
-                        onCheckedChange={(checked) =>
-                          handleCheck(itemId, checked as boolean)
-                        }
-                        className="mt-1"
-                      />
-                      <label
-                        htmlFor={itemId}
-                        className={`flex-1 cursor-pointer text-sm leading-relaxed ${
-                          checkedItems.has(itemId)
-                            ? "text-muted-foreground line-through"
-                            : ""
-                        }`}
-                      >
-                        {direction}
-                      </label>
-                    </div>
-                  );
-                })}
+  const isChecked = (stepId: string) => checkedSteps.has(stepId);
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>니팅 패턴</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        {steps.map((step, index) => {
+          const stepId = `step-${step.order}`;
+          const checked = isChecked(stepId);
+
+          return (
+            <div key={stepId} className="space-y-3">
+              {/* 메인 단계 */}
+              <div className="flex items-start gap-3">
+                <Checkbox
+                  id={stepId}
+                  checked={checked}
+                  onCheckedChange={() => handleCheck(stepId)}
+                  className="mt-1"
+                />
+                <label
+                  htmlFor={stepId}
+                  className={`flex-1 cursor-pointer text-base leading-relaxed ${
+                    checked
+                      ? "text-muted-foreground line-through"
+                      : "text-foreground"
+                  }`}
+                >
+                  <span className="mr-2 font-semibold">{step.order}.</span>
+                  {step.content}
+                </label>
               </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-    </div>
+
+              {/* 하위 단계 */}
+              {step.subSteps && step.subSteps.length > 0 && (
+                <div className="ml-8 space-y-2">
+                  {step.subSteps.map((subStep) => {
+                    const subStepId = `step-${step.order}-${subStep.order}`;
+                    const subChecked = isChecked(subStepId);
+
+                    return (
+                      <div key={subStepId} className="flex items-start gap-3">
+                        <Checkbox
+                          id={subStepId}
+                          checked={subChecked}
+                          onCheckedChange={() => handleCheck(subStepId)}
+                          className="mt-1"
+                        />
+                        <label
+                          htmlFor={subStepId}
+                          className={`flex-1 cursor-pointer text-sm leading-relaxed ${
+                            subChecked
+                              ? "text-muted-foreground line-through"
+                              : "text-foreground"
+                          }`}
+                        >
+                          <span className="mr-2 text-muted-foreground">
+                            {step.order}-{subStep.order}.
+                          </span>
+                          {subStep.content}
+                        </label>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+
+              {/* 구분선 (마지막 단계가 아닌 경우) */}
+              {index < steps.length - 1 && <Separator className="my-4" />}
+            </div>
+          );
+        })}
+      </CardContent>
+    </Card>
   );
 }
