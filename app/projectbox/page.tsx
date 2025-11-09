@@ -4,6 +4,7 @@ import ProjectList from "./project-list";
 
 export type Project = {
   id: number;
+  name: string;
   content: string;
   isCompleted: boolean;
 };
@@ -13,12 +14,13 @@ export default function ProjectBox() {
     prisma.project.findMany({
       select: {
         id: true,
+        name: true,
         content: true,
         isCompleted: true,
       },
     }),
   );
-  console.log("💻 - page.tsx - projects:", projects);
+  // console.log("💻 - page.tsx - projects:", projects);
 
   return (
     // if there is any project, show projects

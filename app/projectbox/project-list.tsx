@@ -3,10 +3,7 @@
 import { useRouter } from "next/navigation";
 import type { Project } from "./page";
 
-type Props = {
-  projects: Project[];
-};
-export default function ProjectList({ projects }: Props) {
+export default function ProjectList({ projects }: { projects: Project[] }) {
   const router = useRouter();
   const handleProjectClick = (projectId: number) => {
     router.push(`/projectbox/${projectId}`);
@@ -25,7 +22,7 @@ export default function ProjectList({ projects }: Props) {
               onClick={() => handleProjectClick(project.id)}
               className="cursor-pointer rounded border border-gray-300 p-4 transition-opacity hover:opacity-80"
             >
-              {project.content}
+              {project.name}
             </div>
           ))
         )}

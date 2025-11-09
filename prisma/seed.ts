@@ -5,17 +5,23 @@ const prisma = new PrismaClient();
 const projects = [
   {
     id: 1,
-    content: "겨울 스웨터 뜨기",
+    name: "겨울 스웨터 뜨기",
+    content:
+      "This is sample content for winter sweater project. PDF parsed text will be stored here.",
     isCompleted: false,
   },
   {
     id: 2,
-    content: "목도리 만들기",
+    name: "목도리 만들기",
+    content:
+      "Sample scarf pattern content. This would contain the actual PDF parsed text from the pattern.",
     isCompleted: true,
   },
   {
     id: 3,
-    content: "니트 양말 한 켤레",
+    name: "니트 양말 한 켤레",
+    content:
+      "Knit socks pattern content. Pattern instructions and details would be stored here.",
     isCompleted: true,
   },
 ];
