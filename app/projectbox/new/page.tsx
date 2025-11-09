@@ -6,6 +6,7 @@ import { uploadPdfAction } from "@/app/pdf.action";
 import PdfUploader, { type ParsedPdfData } from "@/components/pdf-upload";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import type { ParsedPattern } from "@/lib/en-pattern-parser";
 import type { Project } from "../page";
 import { createProjectAction, getProjectsAction } from "../project.action";
 
@@ -13,6 +14,9 @@ export default function NewProject() {
   const router = useRouter();
   const [projectName, setProjectName] = useState<string>("");
   const [parsedText, setParsedText] = useState<string>("");
+  const [parsedPattern, setParsedPattern] = useState<ParsedPattern | null>(
+    null,
+  );
   const [projects, setProjects] = useState<Project[]>([]);
   const [isCreating, setIsCreating] = useState(false);
 
@@ -23,6 +27,7 @@ export default function NewProject() {
   const handlePdfSuccess = (data: ParsedPdfData) => {
     console.log("Parsed PDF data:", data);
     setParsedText(data.text);
+    setParsedPattern(data.pattern || null);
   };
 
   const handleCreateProject = async () => {
@@ -37,7 +42,11 @@ export default function NewProject() {
 
     setIsCreating(true);
     try {
-      await createProjectAction(projectName, parsedText);
+      await createProjectAction(
+        projectName,
+        parsedText,
+        parsedPattern || undefined,
+      );
       alert("Done!");
       router.push("/projectbox");
     } catch (err) {
@@ -71,9 +80,17 @@ export default function NewProject() {
           />
         </div>
         {parsedText && (
-          <p className="text-muted-foreground text-sm">
-            ✓ PDF가 업로드되었습니다 ({parsedText.length}자)
-          </p>
+          <div className="space-y-1">
+            <p className="text-muted-foreground text-sm">
+              ✓ PDF가 업로드되었습니다 ({parsedText.length}자)
+            </p>
+            {parsedPattern && (
+              <p className="text-muted-foreground text-xs">
+                ✓ {parsedPattern.sections.length} sections,{" "}
+                {parsedPattern.sizes.length} sizes detected
+              </p>
+            )}
+          </div>
         )}
       </div>
 

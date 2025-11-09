@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 
 type SubStep = {
@@ -29,7 +31,17 @@ export default function PatternViewer({
 }: PatternViewerProps) {
   const [checkedSteps, setCheckedSteps] = useState<Set<string>>(new Set());
 
-  // 로컬 스토리지에서 체크 상태 불러오기
+  // Calculate total steps
+  const totalSteps = steps.reduce(
+    (acc, step) => acc + 1 + (step.subSteps?.length || 0),
+    0,
+  );
+
+  const completedSteps = checkedSteps.size;
+  const progressPercentage =
+    totalSteps > 0 ? Math.round((completedSteps / totalSteps) * 100) : 0;
+
+  // Load checked state from localStorage
   useEffect(() => {
     const saved = localStorage.getItem(`pattern-progress-${patternId}`);
     if (saved) {
@@ -42,22 +54,17 @@ export default function PatternViewer({
     }
   }, [patternId]);
 
-  // 체크 상태 변경 시 로컬 스토리지에 저장
+  // Save checked state to localStorage
   useEffect(() => {
     localStorage.setItem(
       `pattern-progress-${patternId}`,
       JSON.stringify(Array.from(checkedSteps)),
     );
 
-    // 진행률 업데이트
     if (onProgressChange) {
-      const totalSteps = steps.reduce(
-        (acc, step) => acc + 1 + (step.subSteps?.length || 0),
-        0,
-      );
-      onProgressChange(checkedSteps.size, totalSteps);
+      onProgressChange(completedSteps, totalSteps);
     }
-  }, [checkedSteps, patternId, steps, onProgressChange]);
+  }, [checkedSteps, patternId, completedSteps, totalSteps, onProgressChange]);
 
   const handleCheck = (stepId: string) => {
     setCheckedSteps((prev) => {
@@ -71,12 +78,34 @@ export default function PatternViewer({
     });
   };
 
+  const handleReset = () => {
+    if (confirm("진행 상황을 초기화하시겠습니까?")) {
+      setCheckedSteps(new Set());
+      localStorage.removeItem(`pattern-progress-${patternId}`);
+    }
+  };
+
   const isChecked = (stepId: string) => checkedSteps.has(stepId);
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>니팅 패턴</CardTitle>
+        <div className="flex items-center justify-between">
+          <CardTitle>니팅 패턴</CardTitle>
+          <Button variant="ghost" size="sm" onClick={handleReset}>
+            초기화
+          </Button>
+        </div>
+        {/* Progress Bar */}
+        <div className="mt-4 space-y-2">
+          <div className="flex items-center justify-between text-sm">
+            <span className="text-muted-foreground">
+              {completedSteps}/{totalSteps} 단계 완료
+            </span>
+            <span className="font-semibold">{progressPercentage}%</span>
+          </div>
+          <Progress value={progressPercentage} className="h-2" />
+        </div>
       </CardHeader>
       <CardContent className="space-y-4">
         {steps.map((step, index) => {
@@ -85,7 +114,7 @@ export default function PatternViewer({
 
           return (
             <div key={stepId} className="space-y-3">
-              {/* 메인 단계 */}
+              {/* Main step */}
               <div className="flex items-start gap-3">
                 <Checkbox
                   id={stepId}
@@ -106,7 +135,7 @@ export default function PatternViewer({
                 </label>
               </div>
 
-              {/* 하위 단계 */}
+              {/* Sub steps */}
               {step.subSteps && step.subSteps.length > 0 && (
                 <div className="ml-8 space-y-2">
                   {step.subSteps.map((subStep) => {
@@ -140,7 +169,7 @@ export default function PatternViewer({
                 </div>
               )}
 
-              {/* 구분선 (마지막 단계가 아닌 경우) */}
+              {/* Separator */}
               {index < steps.length - 1 && <Separator className="my-4" />}
             </div>
           );
