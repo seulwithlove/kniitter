@@ -100,6 +100,8 @@ export default function PdfUploader({ uploadPdf, onSuccess }: PdfUploadProps) {
       if (data) {
         setParsedData(data);
         toast.success(`File is uploaded! (${data.pages}pages`);
+
+        onSuccess?.(data);
       }
     });
   };
