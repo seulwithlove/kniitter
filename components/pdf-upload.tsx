@@ -8,6 +8,7 @@ import {
   useTransition,
 } from "react";
 import { toast } from "sonner";
+import type { ParsedPattern } from "@/lib/en-pattern-parser";
 import { cn } from "@/lib/utils";
 import {
   Card,
@@ -21,13 +22,12 @@ export type ParsedPdfData = {
   filename: string;
   pages?: number;
   text: string;
+  pattern?: ParsedPattern;
 };
 
 export type UploadPdfReturn = Promise<
   [null, ParsedPdfData] | [{ pdf?: { errors: string[] } }, null]
 >;
-
-("Promise<(ParsedPdfData | null)[] | ({ pdf: { errors: string[]; }; } | null)[]>");
 
 type PdfUploadProps = {
   uploadPdf?: (formData: FormData) => UploadPdfReturn;
@@ -227,12 +227,31 @@ export default function PdfUploader({ uploadPdf, onSuccess }: PdfUploadProps) {
                 <p>
                   <span className="font-medium">Pages:</span> {parsedData.pages}
                 </p>
-                <p>
-                  <span className="font-medium">Text lengths:</span>{" "}
-                  {parsedData.text.length}
-                </p>
+                {parsedData.pattern && (
+                  <>
+                    <p>
+                      <span className="font-medium">Pattern Name:</span>{" "}
+                      {parsedData.pattern.title || "Untitled"}
+                    </p>
+                    <p>
+                      <span className="font-medium">Sizes:</span>{" "}
+                      {parsedData.pattern.sizes.map((s) => s.label).join(", ")}
+                    </p>
+                    {parsedData.pattern.difficulty && (
+                      <p>
+                        <span className="font-medium">Difficulty:</span>{" "}
+                        {parsedData.pattern.difficulty}
+                      </p>
+                    )}
+                    {parsedData.pattern.gauge && (
+                      <p>
+                        <span className="font-medium">Gauge:</span>{" "}
+                        {parsedData.pattern.gauge}
+                      </p>
+                    )}
+                  </>
+                )}
               </div>
-              <div className="space-y-1 text-sm">{parsedData.text}</div>
             </div>
           )}
         </form>

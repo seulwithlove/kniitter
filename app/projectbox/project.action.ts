@@ -1,6 +1,7 @@
 "use server";
 
 import prisma from "@/lib/db";
+import { ParsedPattern } from "@/lib/en-pattern-parser";
 
 export async function getProjectsAction() {
   const projects = await prisma.project.findMany({
@@ -27,11 +28,17 @@ export async function getProjectByIdAction(id: number) {
   return project;
 }
 
-export async function createProjectAction(name: string, content: string) {
+export async function createProjectAction(
+  name: string,
+  content: string,
+  parsedPattern?: ParsedPattern,
+) {
   const project = await prisma.project.create({
     data: {
       name,
-      content,
+      content: parsedPattern
+        ? JSON.stringify(parsedPattern, null, 2) // Store as formatted JSON
+        : content,
     },
   });
   return project;

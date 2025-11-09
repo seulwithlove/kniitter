@@ -2,6 +2,7 @@
 
 import { PDFParse } from "pdf-parse";
 import type { ParsedPdfData, UploadPdfReturn } from "@/components/pdf-upload";
+import { parseKnittingPattern } from "@/lib/en-pattern-parser";
 
 export async function uploadPdfAction(formData: FormData): UploadPdfReturn {
   try {
@@ -32,10 +33,13 @@ export async function uploadPdfAction(formData: FormData): UploadPdfReturn {
     const parser = new PDFParse({ data: buffer });
     const result = await parser.getText();
 
+    // use en-pattern-parser
+    const parsedPattern = parseKnittingPattern(result.text.trim(), file.name);
+
     const parsedData: ParsedPdfData = {
       filename: file.name,
-      // pages: result.numpages || 0,
       text: result.text.trim(),
+      pattern: parsedPattern,
     };
 
     return [null, parsedData];
