@@ -122,6 +122,22 @@
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
     /* ... */
+
+    /* Pattern Type Colors (from DESIGN.md) */
+    --pattern-basic: #add8e6; /* Light Blue */
+    --pattern-lace: #da70d6; /* Purple */
+    --pattern-cable: #ff8c42; /* Orange */
+    --pattern-colorwork: #e6b3e6; /* Pink */
+    --pattern-textured: #b2e8d8; /* Mint */
+    --pattern-custom: #f5e6d3; /* Beige */
+
+    /* Pattern Type Text Colors (darker for contrast) */
+    --pattern-basic-text: #1e5a7a;
+    --pattern-lace-text: #7a3e7e;
+    --pattern-cable-text: #b85e1e;
+    --pattern-colorwork-text: #a65ea6;
+    --pattern-textured-text: #4a9b85;
+    --pattern-custom-text: #8a7a64;
   }
 
   .dark {
@@ -131,11 +147,27 @@
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
     /* ... */
+
+    /* Pattern Type Colors (darker versions for dark mode) */
+    --pattern-basic: #5b9bb3;
+    --pattern-lace: #9b4d9f;
+    --pattern-cable: #cc6f35;
+    --pattern-colorwork: #b889b8;
+    --pattern-textured: #7fb8a8;
+    --pattern-custom: #c4b6a4;
+
+    /* Pattern Type Text Colors (lighter for dark mode) */
+    --pattern-basic-text: #b3d9e9;
+    --pattern-lace-text: #e0a3e4;
+    --pattern-cable-text: #ffb380;
+    --pattern-colorwork-text: #f0d0f0;
+    --pattern-textured-text: #c0f0e0;
+    --pattern-custom-text: #f0e8dc;
   }
 
   /* Mobile-first container */
   body {
-    max-width: 480px; /* iPhone 14 Pro Max width */
+    /*max-width: 480px; /* iPhone 14 Pro Max width */
     margin: 0 auto;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
   }
