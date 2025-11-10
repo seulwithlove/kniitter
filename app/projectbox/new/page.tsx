@@ -82,7 +82,7 @@ export default function NewProject() {
         {parsedText && (
           <div className="space-y-1">
             <p className="text-muted-foreground text-sm">
-              ✓ PDF가 업로드되었습니다 ({parsedText.length}자)
+              ✓ PDF is successfully uploaded! ({parsedText.length}자)
             </p>
             {parsedPattern && (
               <p className="text-muted-foreground text-xs">

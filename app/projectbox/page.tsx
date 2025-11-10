@@ -22,10 +22,5 @@ export default function ProjectBox() {
   );
   // console.log("💻 - page.tsx - projects:", projects);
 
-  return (
-    // if there is any project, show projects
-    // if not just show pdf uploader
-
-    <ProjectList projects={projects} />
-  );
+  return <ProjectList projects={projects} />;
 }
