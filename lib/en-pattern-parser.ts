@@ -176,10 +176,9 @@ function parseSizes(text: string): SizeInfo[] {
       for (const sizeNum of sizeNumbers) {
         const num = sizeNum.replace(/[()]/g, "").trim();
         const label = sizeLabels[index] || `Size ${num}`;
-        const measurement =
-          bustMeasurements && bustMeasurements[index]
-            ? `${bustMeasurements[index]} cm`
-            : undefined;
+        const measurement = bustMeasurements?.[index]
+          ? `${bustMeasurements[index]} cm`
+          : undefined;
 
         sizes.push({
           name: num,
@@ -269,9 +268,9 @@ function parseSections(text: string): PatternSection[] {
     const rowMatch = line.match(/^(Row|Round)\s+(\d+)\s*\((rs|ws)\):\s*(.+)/i);
     if (rowMatch && currentSection) {
       currentRows.push({
-        order: parseInt(rowMatch[2]),
+        order: parseInt(rowMatch[2], 10),
         content: rowMatch[4],
-        rowNumber: parseInt(rowMatch[2]),
+        rowNumber: parseInt(rowMatch[2], 10),
       });
       currentContent.push(line);
       continue;
@@ -329,7 +328,7 @@ function parseSteps(text: string): Step[] {
       trimmed.length > 0 &&
       !trimmed.match(/^(Row|Round|Size)/)
     ) {
-      currentStep.content += " " + trimmed;
+      currentStep.content += ` ${trimmed}`;
     }
   }
 

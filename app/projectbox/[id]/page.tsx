@@ -93,7 +93,8 @@ export default function Pattern({
   const { id } = use(params);
   const [selectedSizeIndex, setSelectedSizeIndex] = useState(0);
   const [pattern, setPattern] = useState<ParsedPattern | null>(null);
-  const [project, setProject] = useState<any>(null);
+  const [project, setProject] =
+    useState<Awaited<ReturnType<typeof getProjectByIdAction>>>(null);
 
   const projectId = Number.parseInt(id, 10);
 
@@ -148,8 +149,8 @@ export default function Pattern({
               <div>
                 <h3 className="mb-2 font-semibold text-sm">Sizes</h3>
                 <div className="flex flex-wrap gap-2">
-                  {pattern.sizes.map((size, idx) => (
-                    <Badge key={idx} variant="outline">
+                  {pattern.sizes.map((size) => (
+                    <Badge key={size.label} variant="outline">
                       {size.label}
                       {size.measurements && ` - ${size.measurements}`}
                     </Badge>
@@ -166,7 +167,7 @@ export default function Pattern({
                   className="flex-1 cursor-pointer"
                 >
                   <h3 className="mb-1 font-semibold text-sm">Gauge</h3>
-                  <p className="text-muted-foreground text-sm">
+                  <p className="font-mono text-muted-foreground text-sm">
                     {pattern.gauge}
                   </p>
                 </label>
@@ -181,7 +182,7 @@ export default function Pattern({
                   className="flex-1 cursor-pointer"
                 >
                   <h3 className="mb-1 font-semibold text-sm">Yarn</h3>
-                  <p className="text-muted-foreground text-sm">
+                  <p className="font-mono text-muted-foreground text-sm">
                     {pattern.yarn}
                   </p>
                 </label>
@@ -196,7 +197,7 @@ export default function Pattern({
                   className="flex-1 cursor-pointer"
                 >
                   <h3 className="mb-1 font-semibold text-sm">Needles</h3>
-                  <p className="text-muted-foreground text-sm">
+                  <p className="font-mono text-muted-foreground text-sm">
                     {pattern.needles}
                   </p>
                 </label>
@@ -209,14 +210,14 @@ export default function Pattern({
                 <h3 className="mb-2 font-semibold text-sm">Notions</h3>
                 <div className="space-y-2">
                   {pattern.notions.map((notion, idx) => (
-                    <div key={idx} className="flex items-start gap-3">
+                    <div key={projectId} className="flex items-start gap-3">
                       <Checkbox
                         id={`notion-${projectId}-${idx}`}
                         className="mt-1"
                       />
                       <label
                         htmlFor={`notion-${projectId}-${idx}`}
-                        className="flex-1 cursor-pointer text-muted-foreground text-sm"
+                        className="flex-1 cursor-pointer font-mono text-muted-foreground text-sm"
                       >
                         {notion}
                       </label>
@@ -253,7 +254,7 @@ export default function Pattern({
           <CardTitle>{project.name}</CardTitle>
         </CardHeader>
         <CardContent>
-          <pre className="whitespace-pre-wrap font-mono text-sm">
+          <pre className="whitespace-pre-wrap font-mono text-base leading-relaxed">
             {project.content}
           </pre>
         </CardContent>

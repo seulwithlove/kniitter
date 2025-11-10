@@ -35,8 +35,7 @@ export default function RootLayout({
   return (
     <html lang="ko" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        style={{ fontFamily: '"Pretendard Variable", sans-serif' }}
+        className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}
       >
         {/* TODO: next-auth SessionProvider */}
         <ThemeProvider
