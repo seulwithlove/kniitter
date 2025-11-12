@@ -86,9 +86,7 @@ export default function CardDialog({
 
   return (
     <Dialog open={isOpen} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button variant="outline">{children}</Button>
-      </DialogTrigger>
+      <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent>
         <form onSubmit={handleSave}>
           <DialogHeader>

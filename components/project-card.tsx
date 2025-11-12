@@ -1,6 +1,6 @@
 "use client";
 
-import { EllipsisIcon } from "lucide-react";
+import { Ellipsis } from "lucide-react";
 import CardDialog from "@/app/projectbox/card-dialog";
 import { getProjectColor } from "@/lib/pattern-types";
 import { getProjectIconVariant, ProjectIcon } from "./pattern-icons";
@@ -37,23 +37,25 @@ export function ProjectCard({ id, name, progress, onClick }: ProjectCardProps) {
           backgroundColor: `var(--pattern-${color.name})`,
         }}
       >
-        {/* Edit button top right */}
+        {/* Edit button */}
         <CardDialog project={{ id, name }}>
           <Button
             variant={"ghost"}
-            onClick={(e) => e.stopPropagation()}
+            onClick={(e) => {
+              e.stopPropagation(); // Prevent card click
+            }}
             className="absolute top-4 right-4 opacity-60 transition-opacity hover:opacity-100"
           >
-            <EllipsisIcon />
+            <Ellipsis />
           </Button>
         </CardDialog>
 
         {/* Geometric icon in center */}
-        <div className="flex h-full flex-col items-center justify-center gap-3 pb-5">
+        <div className="flex h-full flex-col items-center justify-center pb-16">
           <ProjectIcon
             variant={iconVariant}
             size={80}
-            className="opacity-80 transition-transform duration-300 group-hover:scale-110"
+            className="pb-5 opacity-80 transition-transform duration-300 group-hover:scale-110"
             style={{
               color: `var(--pattern-${color.name}-text)`,
             }}
