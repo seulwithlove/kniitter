@@ -16,44 +16,5 @@ model Project {
   name        String   @db.VarChar(225)
   content     String   @db.LongText
   isCompleted Boolean  @default(false)
-}
-
-model Pattern {
-  id           String   @id @default(cuid())
-  fileName     String
-  content      String   @db.Text
-  originalText String   @db.Text
-  uploadedAt   DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-
-  sizes Size[]
-  steps Step[]
-
-  @@map("patterns")
-}
-
-model Size {
-  id        String @id @default(cuid())
-  name      String // 'S', 'M', 'L', 'XL'
-  label     String // '85cm', '90cm', etc.
-  patternId String
-
-  pattern Pattern @relation(fields: [patternId], references: [id], onDelete: Cascade)
-
-  @@map("sizes")
-}
-
-model Step {
-  id          String  @id @default(cuid())
-  order       Int
-  content     String  @db.Text
-  isCompleted Boolean @default(false)
-  patternId   String
-  parentId    String?
-
-  pattern  Pattern @relation(fields: [patternId], references: [id], onDelete: Cascade)
-  parent   Step?   @relation("SubSteps", fields: [parentId], references: [id], onDelete: Cascade)
-  subSteps Step[]  @relation("SubSteps")
-
-  @@map("steps")
+  progress    Json?
 }
