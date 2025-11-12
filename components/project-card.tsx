@@ -29,7 +29,7 @@ export function ProjectCard({ id, name, progress, onClick }: ProjectCardProps) {
     <button
       type="button"
       onClick={onClick}
-      className="group relative aspect-square w-full overflow-hidden rounded-2xl border-2 border-black/10 shadow-lg transition-all duration-300 hover:scale-[1.02] hover:border-black/20 hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:border-white/10 dark:hover:border-white/20"
+      className="group relative aspect-square w-full overflow-hidden rounded-3xl border border-black/10 shadow-sm transition-all duration-300 hover:scale-[1.02] hover:border-black/20 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 dark:border-white/10 dark:hover:border-white/20"
       style={{
         backgroundColor: `var(--pattern-${color.name})`,
       }}

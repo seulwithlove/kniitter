@@ -119,8 +119,8 @@
     --primary-foreground: 0 0% 100%;
 
     /* 나머지 shadcn 기본 변수들 */
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 42 47% 95%; /* Warm cream/beige #F5F1E8 */
+    --foreground: 30 25% 15%; /* Warm dark gray #2C2416 */
     /* ... */
 
     /* Pattern Type Colors (from DESIGN.md) */
