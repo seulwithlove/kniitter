@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { type PropsWithChildren, useActionState, useState } from "react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -49,7 +50,8 @@ export default function CardDialog({
   );
 
   const remove = async () => {
-    console.log("remove!!!!");
+    console.log("💻 - card-dialog.tsx - remove!!!!");
+
     const ret = await confirm({
       title: "Are you sure?",
       description: "This action cannot be undone.",
@@ -61,10 +63,8 @@ export default function CardDialog({
     console.log("💻 - card-dialog.tsx - err:", err);
 
     if (err?.error) {
-      await alert({
-        title: err.error,
-        okText: "OK",
-        variant: "destructive",
+      toast.error(err.error, {
+        duration: 4000,
       });
       return;
     }
