@@ -1,4 +1,4 @@
-import { FileText, Plus } from "lucide-react";
+import { FileText, Plus, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { use } from "react";
 import { Button } from "@/components/ui/button";
@@ -31,7 +31,8 @@ export default function Home() {
         {/* Icon */}
         <div className="flex justify-center py-8">
           <div className="rounded-full bg-primary/10 p-8">
-            <FileText className="h-16 w-16 text-primary" strokeWidth={1.5} />
+            <Sparkles className="h-16 w-16 text-primary" strokeWidth={1.5} />
+            {/* <FileText className="h-16 w-16 text-primary" strokeWidth={1.5} /> */}
           </div>
         </div>
 

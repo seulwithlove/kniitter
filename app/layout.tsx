@@ -19,13 +19,14 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Kniitter",
   description: "Knit Patterns Reader",
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-    maximumScale: 1,
-    userScalable: false, // Prevents pinch zoom for app-like feel
-  },
 };
+
+// export const viewport: Viewport = {
+//   width: "device-width",
+//   initialScale: 1,
+//   maximumScale: 1,
+//   userScalable: false, // Prevents pinch zoom for app-like feel
+// };
 
 export default function RootLayout({
   children,
@@ -48,9 +49,9 @@ export default function RootLayout({
             <header className="sticky top-0 z-50 flex justify-between border-b bg-background/95 px-4 py-3 backdrop-blur supports-[backdrop-filter]:bg-background/60">
               <Link
                 href="/"
-                className="flex items-center font-semibold text-2xl tracking-tight"
+                className="mono-font flex items-center truncate font-semibold text-2xl tracking-tight"
               >
-                Kniiter
+                kniitter
               </Link>
               <Nav />
             </header>
