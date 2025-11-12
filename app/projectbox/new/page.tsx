@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import type { ParsedPattern } from "@/lib/en-pattern-parser";
 import type { Project } from "../page";
-import { createProjectAction, getProjectsAction } from "../project.action";
+import { createProject, getProjects } from "../project.action";
 
 export default function NewProject() {
   const router = useRouter();
@@ -21,7 +21,7 @@ export default function NewProject() {
   const [isCreating, setIsCreating] = useState(false);
 
   useEffect(() => {
-    getProjectsAction().then(setProjects);
+    getProjects().then(setProjects);
   }, []);
 
   const handlePdfSuccess = (data: ParsedPdfData) => {
@@ -42,11 +42,7 @@ export default function NewProject() {
 
     setIsCreating(true);
     try {
-      await createProjectAction(
-        projectName,
-        parsedText,
-        parsedPattern || undefined,
-      );
+      await createProject(projectName, parsedText, parsedPattern || undefined);
       alert("Done!");
       router.push("/projectbox");
     } catch (err) {
