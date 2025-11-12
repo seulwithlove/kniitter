@@ -1,6 +1,6 @@
 "use client";
 
-import { Waves } from "lucide-react";
+import { Ellipsis } from "lucide-react";
 import { getProjectColor } from "@/lib/pattern-types";
 import { getProjectIconVariant, ProjectIcon } from "./pattern-icons";
 
@@ -29,14 +29,14 @@ export function ProjectCard({ id, name, progress, onClick }: ProjectCardProps) {
     <button
       type="button"
       onClick={onClick}
-      className="group relative aspect-square w-full overflow-hidden rounded-2xl shadow-md transition-all duration-300 hover:scale-[1.02] hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+      className="group relative aspect-square w-full overflow-hidden rounded-2xl border-2 border-black/10 shadow-lg transition-all duration-300 hover:scale-[1.02] hover:border-black/20 hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:border-white/10 dark:hover:border-white/20"
       style={{
         backgroundColor: `var(--pattern-${color.name})`,
       }}
     >
       {/* Waves bar top right */}
       <div className="absolute top-4 right-4 flex gap-0.5 opacity-60">
-        <Waves />
+        <Ellipsis />
       </div>
 
       {/* Project name top left */}
