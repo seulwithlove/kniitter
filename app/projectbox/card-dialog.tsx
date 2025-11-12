@@ -60,28 +60,25 @@ export default function CardDialog({
   };
 
   const handleDelete = async () => {
-    if (!deleteConfirm) {
-      setDeleteConfirm(true);
-      return;
-    }
     const ret = await confirm({ title: "Are u sure??" });
     if (!ret) return;
 
     setPending(true);
     const result = await deleteProject(project.id);
 
-    if (result) {
-      if ("error" in result) {
-        setError(result.error || "");
-        setPending(false);
-        return;
-      }
-      await alert({ title: result.error?.[0] || "", okText: "Confirm" });
-      setOpen(false);
+    if (result && "error" in result && result.error) {
+      await alert({
+        title: result.error,
+        okText: "OK",
+      });
+      setError(result.error);
+      setPending(false);
       return;
     }
+
     router.refresh();
     setOpen(false);
+    setPending(false);
   };
 
   return (
