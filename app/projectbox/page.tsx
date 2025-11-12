@@ -28,5 +28,11 @@ export default function ProjectBox() {
     progress: project.progress as string[] | null,
   }));
 
-  return <ProjectList projects={projects} />;
+  // TODO: if mobile, add BackButton
+  return (
+    <div>
+      <div>{/* <BackButton /> */}</div>
+      <ProjectList projects={projects} />
+    </div>
+  );
 }
