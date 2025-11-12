@@ -47,7 +47,7 @@ export default function SizeSelector({
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-lg">사이즈 선택</CardTitle>
+        <CardTitle className="text-lg">Select Size</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="flex flex-wrap gap-2">
