@@ -37,19 +37,6 @@ export function ProjectCard({ id, name, progress, onClick }: ProjectCardProps) {
           backgroundColor: `var(--pattern-${color.name})`,
         }}
       >
-        {/* Edit button */}
-        <CardDialog project={{ id, name }}>
-          <Button
-            variant={"ghost"}
-            onClick={(e) => {
-              e.stopPropagation(); // Prevent card click
-            }}
-            className="absolute top-4 right-4 opacity-60 transition-opacity hover:opacity-100"
-          >
-            <Ellipsis />
-          </Button>
-        </CardDialog>
-
         {/* Geometric icon in center */}
         <div className="flex h-full flex-col items-center justify-center pb-16">
           <ProjectIcon
@@ -112,6 +99,19 @@ export function ProjectCard({ id, name, progress, onClick }: ProjectCardProps) {
           )}
         </div>
       </button>
+
+      {/* Edit button */}
+      <CardDialog project={{ id, name }}>
+        <Button
+          variant={"ghost"}
+          onClick={(e) => {
+            e.stopPropagation(); // Prevent card click
+          }}
+          className="absolute top-4 right-4 opacity-60 transition-opacity hover:opacity-100"
+        >
+          <Ellipsis />
+        </Button>
+      </CardDialog>
     </div>
   );
 }
