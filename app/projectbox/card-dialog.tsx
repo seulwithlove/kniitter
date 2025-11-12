@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { type PropsWithChildren, useState } from "react";
+import { type PropsWithChildren, useActionState, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -29,63 +29,55 @@ export default function CardDialog({
   project,
   children,
 }: PropsWithChildren<CardDialogProps>) {
-  const { confirm, alert, prompt } = useAlerter();
+  const { confirm, alert } = useAlerter();
   const router = useRouter();
   const [isOpen, setOpen] = useState(false);
-  const [isPending, setPending] = useState(false);
-  const [projectName, setProjectName] = useState(project.name);
-  const [error, setError] = useState<string>("");
-  const [deleteConfirm, setDeleteConfirm] = useState(false);
 
-  const handleSave = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!projectName.trim()) {
-      setError("Project name is required");
-      return;
-    }
+  const [error, save, isPending] = useActionState(
+    async (_: { error: string } | undefined, formData: FormData) => {
+      formData.set("id", String(project.id));
 
-    setPending(true), setError("");
+      const err = await updateProject(formData);
 
-    const result = await updateProject(project.id, projectName.trim());
+      if (err) {
+        return err;
+      }
+      router.refresh();
+      setOpen(false);
+    },
+    undefined,
+  );
 
-    if ("error" in result) {
-      setError(result.error);
-      setPending(false);
-      return;
-    }
+  const remove = async () => {
+    console.log("remove!!!!");
+    const ret = await confirm({
+      title: "Are you sure?",
+      description: "This action cannot be undone.",
+    });
 
-    router.refresh();
-    setOpen(false);
-    setPending(false);
-  };
-
-  const handleDelete = async () => {
-    const ret = await confirm({ title: "Are u sure??" });
     if (!ret) return;
 
-    setPending(true);
-    const result = await deleteProject(project.id);
+    const err = await deleteProject(project.id);
+    console.log("💻 - card-dialog.tsx - err:", err);
 
-    if (result && "error" in result && result.error) {
+    if (err?.error) {
       await alert({
-        title: result.error,
+        title: err.error,
         okText: "OK",
+        variant: "destructive",
       });
-      setError(result.error);
-      setPending(false);
       return;
     }
-
     router.refresh();
     setOpen(false);
-    setPending(false);
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={setOpen}>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent>
-        <form onSubmit={handleSave}>
+        {/* <form onSubmit={handleSave}> */}
+        <form action={save}>
           <DialogHeader>
             <DialogTitle>Edit Project</DialogTitle>
             <DialogDescription>
@@ -100,12 +92,12 @@ export default function CardDialog({
               </Label>
               <Input
                 id="name"
-                value={projectName}
-                onChange={(e) => setProjectName(e.target.value)}
+                name="name"
+                defaultValue={project.name}
                 placeholder="Enter project name"
                 className={error ? "border-pink-800" : ""}
               />
-              {error && <p className="text-pink-800 text-sm">{error}</p>}
+              {error && <p className="text-pink-800 text-sm">{error.error}</p>}
             </div>
           </div>
 
@@ -115,12 +107,12 @@ export default function CardDialog({
             </DialogClose>
 
             <Button
-              onClick={handleDelete}
+              onClick={remove}
               type="button"
-              variant={deleteConfirm ? "destructive" : "outline"}
+              variant={"destructive"}
               disabled={isPending}
             >
-              {deleteConfirm ? "Confirm Delete?" : "Delete"}
+              Delete
             </Button>
 
             <Button type="submit" disabled={isPending}>

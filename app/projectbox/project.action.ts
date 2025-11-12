@@ -48,19 +48,28 @@ export async function createProject(
   return project;
 }
 
-export async function updateProject(id: number, name: string) {
+export async function updateProject(formData: FormData) {
+  const id = Number(formData.get("id"));
+  const name = formData.get("name")?.toString().trim() || "";
+  console.log("💻 - project.action.ts -id, name:", id, name);
+
+  // Validation - only check for blank
+  if (!name) {
+    return { error: "Project name is required" };
+  }
+
   try {
-    const project = await prisma.project.update({
+    await prisma.project.update({
       where: { id },
       data: { name },
     });
-    return project;
-  } catch (err) {
-    return { error: "Failed to update project" };
+  } catch (error) {
+    return { error: `Failed to save project: ${error}` };
   }
 }
 
 export async function deleteProject(id: number) {
+  console.log("delete function!!!!!");
   try {
     const project = await prisma.project.findUnique({
       where: { id },
@@ -74,7 +83,7 @@ export async function deleteProject(id: number) {
     });
     return { success: true };
   } catch (error) {
-    return { error: "Failed to delete project" };
+    return { error: `Failed to delete project: ${error}` };
   }
 }
 

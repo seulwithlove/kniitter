@@ -25,7 +25,7 @@ export function ProjectCard({ id, name, progress, onClick }: ProjectCardProps) {
     ? Math.round((progress.completed / progress.total) * 100)
     : 0;
 
-  console.log(progress);
+  // console.log(progress);
 
   return (
     <div className="relative">
