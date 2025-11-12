@@ -1,5 +1,6 @@
 "use client";
 
+import { Waves } from "lucide-react";
 import { getProjectColor } from "@/lib/pattern-types";
 import { getProjectIconVariant, ProjectIcon } from "./pattern-icons";
 
@@ -22,6 +23,8 @@ export function ProjectCard({ id, name, progress, onClick }: ProjectCardProps) {
     ? Math.round((progress.completed / progress.total) * 100)
     : 0;
 
+  console.log(progress);
+
   return (
     <button
       type="button"
@@ -31,11 +34,9 @@ export function ProjectCard({ id, name, progress, onClick }: ProjectCardProps) {
         backgroundColor: `var(--pattern-${color.name})`,
       }}
     >
-      {/* Three-bar icon (|||) top right */}
+      {/* Waves bar top right */}
       <div className="absolute top-4 right-4 flex gap-0.5 opacity-60">
-        <div className="h-4 w-0.5 rounded-full bg-current" />
-        <div className="h-4 w-0.5 rounded-full bg-current" />
-        <div className="h-4 w-0.5 rounded-full bg-current" />
+        <Waves />
       </div>
 
       {/* Project name top left */}
@@ -74,7 +75,7 @@ export function ProjectCard({ id, name, progress, onClick }: ProjectCardProps) {
         </p>
 
         {/* Progress bar and percentage */}
-        {progress && progress.total > 0 && (
+        {progress && progress.total >= 0 && (
           <div className="mt-2 space-y-1">
             <div className="flex items-center justify-between text-xs">
               <span

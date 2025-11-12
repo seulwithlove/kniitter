@@ -2,6 +2,10 @@
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import {
+  getProjectProgress,
+  updateProjectProgress,
+} from "@/app/projectbox/project.action";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -22,12 +26,14 @@ type Step = {
 type PatternViewerProps = {
   steps: Step[];
   patternId?: string;
+  projectId?: number;
   onProgressChange?: (completed: number, total: number) => void;
 };
 
 export default function PatternViewer({
   steps,
   patternId = "default",
+  projectId,
   onProgressChange,
 }: PatternViewerProps) {
   const [checkedSteps, setCheckedSteps] = useState<Set<string>>(new Set());
@@ -56,18 +62,26 @@ export default function PatternViewer({
   const progressPercentage =
     totalSteps > 0 ? Math.round((completedSteps / totalSteps) * 100) : 0;
 
-  // Load checked state from localStorage
+  // Load checked state from db
   useEffect(() => {
-    const saved = localStorage.getItem(`pattern-progress-${patternId}`);
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        setCheckedSteps(new Set(parsed));
-      } catch (error) {
-        console.error("Failed to parse saved progress:", error);
-      }
+    if (projectId) {
+      getProjectProgress(projectId).then((progress) => {
+        if (progress) {
+          setCheckedSteps(new Set(progress));
+        }
+      });
     }
-  }, [patternId]);
+  }, [projectId]);
+
+  // Save db using debounce
+  useEffect(() => {
+    if (projectId) {
+      const timeoutId = setTimeout(() => {
+        updateProjectProgress(projectId, Array.from(checkedSteps));
+      }, 500); // save after 500ms
+      return () => clearTimeout(timeoutId);
+    }
+  }, [checkedSteps, projectId]);
 
   // Update current row whenever checked steps change
   useEffect(() => {
@@ -137,7 +151,7 @@ export default function PatternViewer({
   };
 
   const handleReset = () => {
-    if (confirm("진행 상황을 초기화하시겠습니까?")) {
+    if (confirm("Do you really want to reset?")) {
       setCheckedSteps(new Set());
       localStorage.removeItem(`pattern-progress-${patternId}`);
       setCurrentRowId(allStepIds[0] || null);
@@ -167,16 +181,16 @@ export default function PatternViewer({
     <Card>
       <CardHeader>
         <div className="flex items-center justify-between">
-          <CardTitle>니팅 패턴</CardTitle>
+          <CardTitle>Patterns</CardTitle>
           <Button variant="ghost" size="sm" onClick={handleReset}>
-            초기화
+            Reset
           </Button>
         </div>
         {/* Progress Bar */}
         <div className="mt-4 space-y-2">
           <div className="flex items-center justify-between text-sm">
             <span className="text-muted-foreground">
-              {completedSteps}/{totalSteps} 단계 완료
+              {completedSteps}/{totalSteps} steps done
             </span>
             <span className="font-semibold">{progressPercentage}%</span>
           </div>

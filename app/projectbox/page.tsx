@@ -7,20 +7,26 @@ export type Project = {
   name: string;
   content: string;
   isCompleted: boolean;
+  progress: string[] | null;
 };
 
 export default function ProjectBox() {
-  const projects = use(
+  const projectsRaw = use(
     prisma.project.findMany({
       select: {
         id: true,
         name: true,
         content: true,
         isCompleted: true,
+        progress: true,
       },
     }),
   );
-  // console.log("💻 - page.tsx - projects:", projects);
+  // Cast progress from JsonValue to string[] | null //TODO: check this pattern
+  const projects: Project[] = projectsRaw.map((project) => ({
+    ...project,
+    progress: project.progress as string[] | null,
+  }));
 
   return <ProjectList projects={projects} />;
 }

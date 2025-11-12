@@ -1,21 +1,22 @@
 "use server";
 
 import prisma from "@/lib/db";
-import { ParsedPattern } from "@/lib/en-pattern-parser";
+import type { ParsedPattern } from "@/lib/en-pattern-parser";
 
-export async function getProjectsAction() {
+export async function getProjects() {
   const projects = await prisma.project.findMany({
     select: {
       id: true,
       name: true,
       content: true,
       isCompleted: true,
+      progress: true,
     },
   });
   return projects;
 }
 
-export async function getProjectByIdAction(id: number) {
+export async function getProjectById(id: number) {
   const project = await prisma.project.findUnique({
     where: { id },
     select: {
@@ -28,7 +29,7 @@ export async function getProjectByIdAction(id: number) {
   return project;
 }
 
-export async function createProjectAction(
+export async function createProject(
   name: string,
   content: string,
   parsedPattern?: ParsedPattern,
@@ -42,4 +43,25 @@ export async function createProjectAction(
     },
   });
   return project;
+}
+
+export async function updateProjectProgress(
+  projectId: number,
+  checkedSteps: string[],
+) {
+  const project = await prisma.project.update({
+    where: { id: projectId },
+    data: {
+      progress: checkedSteps,
+    },
+  });
+  return project;
+}
+
+export async function getProjectProgress(projectId: number) {
+  const project = await prisma.project.findUnique({
+    where: { id: projectId },
+    select: { progress: true },
+  });
+  return project?.progress as string[] | null;
 }

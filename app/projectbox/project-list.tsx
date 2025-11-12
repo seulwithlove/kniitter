@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import getTotalSteps from "@/components/get-total-steps";
 import { ProjectCard } from "@/components/project-card";
 import type { Project } from "./page";
 
@@ -15,7 +16,7 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
     <div className="container mx-auto max-w-2xl px-4 py-6">
       {/* Header */}
       <div className="mb-6">
-        <h1 className="font-bold text-3xl tracking-tight">My Projects</h1>
+        <h1 className="font-bold text-3xl tracking-tight">Projects</h1>
         <p className="mt-1 text-muted-foreground text-sm">
           Select a project to continue working
         </p>
@@ -47,18 +48,24 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
         </div>
       ) : (
         <div className="grid grid-cols-2 gap-4">
-          {projects.map((project) => (
-            <ProjectCard
-              key={project.id}
-              id={project.id}
-              name={project.name}
-              progress={{
-                completed: 0, // TODO: Calculate from actual progress
-                total: 100, // TODO: Get from project data
-              }}
-              onClick={() => handleProjectClick(project.id)}
-            />
-          ))}
+          {projects.map((project) => {
+            const totalSteps = getTotalSteps(project.content);
+            const completedSteps = Array.isArray(project.progress)
+              ? project.progress.length
+              : 0;
+            return (
+              <ProjectCard
+                key={project.id}
+                id={project.id}
+                name={project.name}
+                progress={{
+                  completed: completedSteps,
+                  total: totalSteps,
+                }}
+                onClick={() => handleProjectClick(project.id)}
+              />
+            );
+          })}
         </div>
       )}
     </div>
