@@ -1,6 +1,10 @@
 /**
- * Knitting Pattern Parser
+ * <Caidree> Knit Pattern Parser
  * Extracts structured data from knitting pattern PDFs
+ *
+ *
+ *
+ *
  */
 
 export type SizeInfo = {
@@ -38,6 +42,10 @@ export type ParsedPattern = {
   yarn?: string;
   needles?: string;
   notions?: string[];
+  abbreviations?: string[];
+  swatch?: string;
+  tip?: string;
+  hint?: string;
 
   // Sizes with measurements
   sizes: SizeInfo[];
@@ -367,7 +375,7 @@ function parseMeasurements(text: string): Record<string, string[]> | undefined {
 /**
  * Main parser function
  */
-export function parseKnittingPattern(
+export function parseCaidreeKnitPattern(
   text: string,
   fileName: string,
 ): ParsedPattern {
@@ -398,5 +406,5 @@ export function parsePatternContent(
   text: string,
   fileName = "Pattern",
 ): ParsedPattern {
-  return parseKnittingPattern(text, fileName);
+  return parseCaidreeKnitPattern(text, fileName);
 }

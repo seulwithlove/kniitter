@@ -7,8 +7,8 @@ import SizeSelector from "@/components/size-selector";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
-import type { ParsedPattern } from "@/lib/en-pattern-parser";
-import { applySize } from "@/lib/size-pattern-recognizer";
+import type { ParsedPattern } from "@/lib/parser/caidree-pattern-parser";
+import { applySize } from "@/lib/parser/size-pattern-recognizer";
 import { getProjectById } from "../project.action";
 
 // Convert ParsedPattern to PatternViewer format with size transformation

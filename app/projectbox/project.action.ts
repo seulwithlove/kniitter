@@ -1,7 +1,7 @@
 "use server";
 
 import prisma from "@/lib/db";
-import type { ParsedPattern } from "@/lib/en-pattern-parser";
+import type { ParsedPattern } from "@/lib/parser/caidree-pattern-parser";
 
 export async function getProjects() {
   const projectsRaw = await prisma.project.findMany({

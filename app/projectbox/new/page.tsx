@@ -2,11 +2,12 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 import { uploadPdfAction } from "@/app/pdf.action";
 import PdfUploader, { type ParsedPdfData } from "@/components/pdf-upload";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import type { ParsedPattern } from "@/lib/en-pattern-parser";
+import type { ParsedPattern } from "@/lib/parser/caidree-pattern-parser";
 import type { Project } from "../page";
 import { createProject, getProjects } from "../project.action";
 
@@ -32,22 +33,22 @@ export default function NewProject() {
 
   const handleCreateProject = async () => {
     if (!projectName.trim()) {
-      alert("Please enter a project name:)");
+      toast.error("Please enter a project name:)");
       return;
     }
     if (!parsedText) {
-      alert("Please upload a PDF:)");
+      toast.error("Please upload a PDF:)");
       return;
     }
 
     setIsCreating(true);
     try {
       await createProject(projectName, parsedText, parsedPattern || undefined);
-      alert("Done!");
+      toast.error("Done!");
       router.push("/projectbox");
     } catch (err) {
       console.error("Failed to create proejct:", err);
-      alert("Failed to create project");
+      toast.error("Failed to create project");
     }
     setIsCreating(false);
   };

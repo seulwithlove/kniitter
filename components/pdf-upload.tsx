@@ -8,7 +8,7 @@ import {
   useTransition,
 } from "react";
 import { toast } from "sonner";
-import type { ParsedPattern } from "@/lib/en-pattern-parser";
+import type { ParsedPattern } from "@/lib/parser/caidree-pattern-parser";
 import { cn } from "@/lib/utils";
 import {
   Card,
@@ -208,7 +208,7 @@ export default function PdfUploader({ uploadPdf, onSuccess }: PdfUploadProps) {
           {errorMsgs.length > 0 && (
             <div className="mt-4">
               {errorMsgs.map((emsg) => (
-                <p key={emsg} className="text-red-500 text-sm">
+                <p key={emsg} className="text-pink-800 text-sm">
                   {emsg}
                 </p>
               ))}

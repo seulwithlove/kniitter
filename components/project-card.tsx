@@ -2,7 +2,7 @@
 
 import { Ellipsis } from "lucide-react";
 import CardDialog from "@/app/projectbox/card-dialog";
-import { getProjectColor } from "@/lib/pattern-types";
+import { getProjectColor } from "@/lib/parser/pattern-types";
 import { getProjectIconVariant, ProjectIcon } from "./pattern-icons";
 import { Button } from "./ui/button";
 
@@ -53,7 +53,8 @@ export function ProjectCard({ id, name, progress, onClick }: ProjectCardProps) {
               color: `var(--pattern-${color.name}-text)`,
             }}
           >
-            {name.length > 15 ? `${name.substring(0, 15)}...` : name}
+            {name.length > 15 ? `${name.substring(0, 15)}...` : name}{" "}
+            {/* TODO: 줄바꿈해서 아래로 보여지도록, 글씨크기 줄이고*/}
           </div>
         </div>
 
