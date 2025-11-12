@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import type { ParsedPattern } from "@/lib/en-pattern-parser";
 import { applySize } from "@/lib/size-pattern-recognizer";
-import { getProjectByIdAction } from "../project.action";
+import { getProjectById } from "../project.action";
 
 // Convert ParsedPattern to PatternViewer format with size transformation
 function convertToViewerSteps(
@@ -94,7 +94,7 @@ export default function Pattern({
   const [selectedSizeIndex, setSelectedSizeIndex] = useState(0);
   const [pattern, setPattern] = useState<ParsedPattern | null>(null);
   const [project, setProject] =
-    useState<Awaited<ReturnType<typeof getProjectByIdAction>>>(null);
+    useState<Awaited<ReturnType<typeof getProjectById>>>(null);
 
   const projectId = Number.parseInt(id, 10);
 
@@ -103,7 +103,7 @@ export default function Pattern({
       if (Number.isNaN(projectId)) {
         notFound();
       }
-      const projectData = await getProjectByIdAction(projectId);
+      const projectData = await getProjectById(projectId);
 
       if (!projectData) {
         notFound();
@@ -240,7 +240,7 @@ export default function Pattern({
 
         {/* Pattern Instructions with Checkboxes */}
         <div>
-          <PatternViewer steps={steps} patternId={projectId.toString()} />
+          <PatternViewer steps={steps} projectId={projectId} />
         </div>
       </div>
     );
