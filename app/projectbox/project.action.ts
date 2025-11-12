@@ -4,7 +4,7 @@ import prisma from "@/lib/db";
 import type { ParsedPattern } from "@/lib/en-pattern-parser";
 
 export async function getProjects() {
-  const projects = await prisma.project.findMany({
+  const projectsRaw = await prisma.project.findMany({
     select: {
       id: true,
       name: true,
@@ -13,7 +13,10 @@ export async function getProjects() {
       progress: true,
     },
   });
-  return projects;
+  return projectsRaw.map((project) => ({
+    ...project,
+    progress: project.progress as string[] | null,
+  }));
 }
 
 export async function getProjectById(id: number) {

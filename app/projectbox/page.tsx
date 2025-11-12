@@ -23,7 +23,7 @@ export default function ProjectBox() {
     }),
   );
   // Cast progress from JsonValue to string[] | null //TODO: check this pattern
-  const projects: Project[] = projectsRaw.map((project) => ({
+  const projects = projectsRaw.map((project) => ({
     ...project,
     progress: project.progress as string[] | null,
   }));
