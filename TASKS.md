@@ -20,11 +20,13 @@
 - [x] Toast 알림 (Toaster 추가)
 
 ## Phase 3: 파싱 로직 ✅
-- [x] PDF 파서 (pdf-parser.ts, pdf2json 라이브러리)
+- [ ] PDF 파서 (pdf-parser.ts, pdf2json 라이브러리)
+    - meta data를 기준으로 바늘이야기, caidree, 
+- [ ] 이미지 추출 로직 : info 부분에 렌더링
 - [ ] 사이즈 패턴 인식 로직 (size-pattern-recognizer.ts)
 - [ ] 단계 분리 로직 (step-separator.ts)
-- [x] PatternUpload 컴포넌트에 파싱 연동
-- [x] 메인 페이지에 전체 플로우 연결
+- [ ] PatternUpload 컴포넌트에 파싱 연동
+- [ ] 메인 페이지에 전체 플로우 연결
 
 ## Phase 4: 상태 관리
 - [ ] 체크박스 상태 관리
