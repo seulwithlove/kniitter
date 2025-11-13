@@ -1,6 +1,6 @@
-"use client";
+"use client"; //TODO: client component 분리
 
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { uploadPdfAction } from "@/app/pdf.action";
@@ -13,6 +13,8 @@ import { createProject, getProjects } from "../project.action";
 
 export default function NewProject() {
   const router = useRouter();
+  const pathname = usePathname();
+
   const [projectName, setProjectName] = useState<string>("");
   const [parsedText, setParsedText] = useState<string>("");
   const [parsedPattern, setParsedPattern] = useState<ParsedPattern | null>(
@@ -20,6 +22,8 @@ export default function NewProject() {
   );
   const [projects, setProjects] = useState<Project[]>([]);
   const [isCreating, setIsCreating] = useState(false);
+
+  const isModal = pathname === "/projectbox/new";
 
   useEffect(() => {
     getProjects().then(setProjects);
@@ -44,8 +48,14 @@ export default function NewProject() {
     setIsCreating(true);
     try {
       await createProject(projectName, parsedText, parsedPattern || undefined);
-      toast.error("Done!");
-      router.push("/projectbox");
+      toast.success("Done!");
+
+      if (isModal) {
+        router.back();
+        setTimeout(() => router.refresh(), 100);
+      } else {
+        router.push("/projectbox");
+      }
     } catch (err) {
       console.error("Failed to create proejct:", err);
       toast.error("Failed to create project");
@@ -54,7 +64,7 @@ export default function NewProject() {
   };
 
   return (
-    <div className="container mx-auto max-w-2xl space-y-6 p-6">
+    <div className="space-y-6 p-6">
       {/* Project Name Input */}
       <div className="space-y-2">
         <label htmlFor="project-name" className="font-medium text-sm">
@@ -79,7 +89,7 @@ export default function NewProject() {
         {parsedText && (
           <div className="space-y-1">
             <p className="text-muted-foreground text-sm">
-              ✓ PDF is successfully uploaded! ({parsedText.length}자)
+              ✓ PDF is successfully uploaded!
             </p>
             {parsedPattern && (
               <p className="text-muted-foreground text-xs">

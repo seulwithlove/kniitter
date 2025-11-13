@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import getTotalSteps from "@/components/get-total-steps";
 import { ProjectCard } from "@/components/project-card";
@@ -45,6 +46,14 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
           <p className="mt-2 text-muted-foreground text-sm">
             Create your first project to get started!
           </p>
+          <div className="mt-6">
+            <Link
+              href="/projectbox/new"
+              className="inline-block rounded-lg bg-primary px-6 py-2 text-primary-foreground transition-colors hover:bg-primary/90"
+            >
+              Create New Project
+            </Link>
+          </div>
         </div>
       ) : (
         <div className="grid grid-cols-2 gap-4">
@@ -66,6 +75,31 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
               />
             );
           })}
+
+          {/* Create New Project Card */}
+          <Link
+            href="/projectbox/new"
+            className="group relative aspect-square w-full overflow-hidden rounded-3xl border-1 border-black/10 border-dashed bg-muted/5 shadow-sm transition-all duration-300 hover:scale-[1.02] hover:border-black/20 hover:bg-muted/10 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 dark:border-white/10 dark:hover:border-white/20"
+          >
+            <div className="flex h-full flex-col items-center justify-center">
+              <svg
+                className="h-11 w-11 text-muted-foreground/60 transition-transform duration-300 group-hover:scale-110"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <title>Add project</title>
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 4v16m8-8H4"
+                />
+              </svg>
+              <span className="mt-4 text-lg text-muted-foreground/80">
+                New Project
+              </span>
+            </div>
+          </Link>
         </div>
       )}
     </div>
