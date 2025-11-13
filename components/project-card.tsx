@@ -29,7 +29,7 @@ export function ProjectCard({ id, name, progress, onClick }: ProjectCardProps) {
   console.log(progress);
 
   return (
-    <div className="relative">
+    <div className="relative flex-shirnk-0">
       <button
         type="button"
         onClick={onClick}
