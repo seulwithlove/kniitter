@@ -64,53 +64,60 @@ export default function NewProject() {
   };
 
   return (
-    <div className="space-y-6 p-6">
-      {/* Project Name Input */}
-      <div className="space-y-2">
-        <label htmlFor="project-name" className="font-medium text-sm">
-          Project Name
-        </label>
-        <Input
-          id="project-name"
-          placeholder="Enter the proejct name"
-          value={projectName}
-          onChange={(e) => setProjectName(e.target.value)}
-        />
-      </div>
-      {/* Project Upload Section */}
-      <div>
-        <p className="font-medium text-sm">Upload PDF</p>
-        <div className="flex justify-center">
-          <PdfUploader
-            uploadPdf={uploadPdfAction}
-            onSuccess={handlePdfSuccess}
-          />
-        </div>
-        {parsedText && (
-          <div className="space-y-1">
-            <p className="text-muted-foreground text-sm">
-              ✓ PDF is successfully uploaded!
-            </p>
-            {parsedPattern && (
-              <p className="text-muted-foreground text-xs">
-                ✓ {parsedPattern.sections.length} sections,{" "}
-                {parsedPattern.sizes.length} sizes detected
-              </p>
-            )}
+    <div className="flex h-full flex-col items-center justify-center space-y-6 px-4">
+      <div className="w-full max-w-md space-y-8">
+        {/* Project Name Input */}
+        <div className="space-y-2 pb-5 text-bold">
+          <div>
+            <label htmlFor="project-name" className="font-medium text-lg">
+              Project Name
+            </label>
           </div>
-        )}
-      </div>
+          <div>
+            <Input
+              id="project-name"
+              placeholder="Enter the proejct name"
+              value={projectName}
+              onChange={(e) => setProjectName(e.target.value)}
+            />
+          </div>
+        </div>
 
-      {/* Create Button */}
-      <div className="pt-4">
-        <Button
-          onClick={handleCreateProject}
-          disabled={isCreating || !projectName.trim() || !parsedText}
-          className="w-full cursor-pointer hover:bg-muted-foreground"
-          size="lg"
-        >
-          {isCreating ? "Creating..." : "Create Project"}
-        </Button>
+        {/* Project Upload Section */}
+        <div>
+          {/* <p className="pb-3 font-medium text-sm">Upload PDF</p> */}
+          <div className="flex justify-center">
+            <PdfUploader
+              uploadPdf={uploadPdfAction}
+              onSuccess={handlePdfSuccess}
+            />
+          </div>
+          {parsedText && (
+            <div className="space-y-1">
+              <p className="text-muted-foreground text-sm">
+                ✓ PDF is successfully uploaded!
+              </p>
+              {parsedPattern && (
+                <p className="text-muted-foreground text-xs">
+                  ✓ {parsedPattern.sections.length} sections,{" "}
+                  {parsedPattern.sizes.length} sizes detected
+                </p>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Create Button */}
+        <div className="pt-4">
+          <Button
+            onClick={handleCreateProject}
+            disabled={isCreating || !projectName.trim() || !parsedText}
+            className="w-full cursor-pointer hover:bg-muted-foreground"
+            size="lg"
+          >
+            {isCreating ? "Creating..." : "Create Project"}
+          </Button>
+        </div>
       </div>
     </div>
   );

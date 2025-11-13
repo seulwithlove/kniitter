@@ -51,13 +51,13 @@ export default function RootLayout({
               <header className="sticky top-0 z-50 flex justify-between border-black/5 border-b bg-background/80 px-6 py-4 backdrop-blur-sm supports-[backdrop-filter]:bg-background/80 dark:border-white/5">
                 <Link
                   href="/"
-                  className="flex items-center truncate font-light text-2xl tracking-tight transition-opacity hover:opacity-70"
+                  className="flex items-center truncate font-light text-3xl tracking-tight transition-opacity hover:opacity-70"
                 >
                   kniitter
                 </Link>
                 <Nav />
               </header>
-              <main className="flex-1 overflow-auto px-4 py-6">{children}</main>
+              <main className="flex-1 px-4 py-6">{children}</main>
               <footer className="border-black/5 border-t bg-background py-4 text-center text-muted-foreground text-xs dark:border-white/5">
                 &#169; slo 2025
               </footer>
