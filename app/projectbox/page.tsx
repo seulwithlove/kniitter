@@ -31,7 +31,7 @@ export default function ProjectBox() {
   // TODO: if mobile, add BackButton
   return (
     <div>
-      <div>{/* <BackButton /> */}</div>
+      {/* <div><BackButton /> </div> */}
       <ProjectList projects={projects} />
     </div>
   );

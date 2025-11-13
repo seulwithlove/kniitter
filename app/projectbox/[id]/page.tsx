@@ -1,4 +1,4 @@
-"use client";
+"use client"; //TODO: client component 분리
 
 import { notFound } from "next/navigation";
 import { use, useEffect, useState } from "react";
@@ -138,9 +138,11 @@ export default function Pattern({
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
               <span>{pattern.title || project.name}</span>
-              {pattern.difficulty && (
-                <Badge variant="secondary">{pattern.difficulty}</Badge>
-              )}
+              {/* {pattern.difficulty && (
+                <Badge variant="secondary">
+                  Difficulty: {pattern.difficulty}
+                </Badge>
+              )} */}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
