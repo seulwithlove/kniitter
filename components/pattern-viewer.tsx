@@ -196,6 +196,7 @@ export default function PatternViewer({
           <CardTitle>Patterns</CardTitle>
           <Button
             variant="ghost"
+            className="cursor-pointer bg-muted hover:bg-muted/80"
             size="sm"
             onClick={() => setShowResetDialog(true)}
           >
