@@ -298,7 +298,7 @@ export default function PatternViewer({
         })}
 
         {/* Navigation Controls */}
-        <div className="-mx-6 -mb-6 sticky bottom-0 mt-6 flex items-center justify-between border-t bg-background px-6 py-4">
+        <div className="-mx-6 sticky bottom-0 mt-6 flex items-center justify-between border-t bg-background px-6 py-4">
           <Button
             variant="outline"
             size="lg"
