@@ -181,10 +181,16 @@
     scrollbar-gutter: stable; /* Critical: prevents shrinking when modal opens */
   }
 
-  /* Ensure body stays centered when modal opens */
+  /* Maintain scrollbar space when scroll is locked by dialog */
   body[data-scroll-locked] {
-    margin-right: 0 !important;
     padding-right: 0 !important;
+    /* Keep scrollbar-gutter to maintain layout */
+    scrollbar-gutter: stable !important;
+  }
+
+  /* Ensure html also maintains scrollbar gutter when body is locked */
+  html:has(body[data-scroll-locked]) {
+    scrollbar-gutter: stable !important;
   }
 
   /* Optional: Add subtle borders on desktop to emphasize mobile view */
