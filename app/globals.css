@@ -184,16 +184,7 @@
   /* Ensure body stays centered when modal opens */
   body[data-scroll-locked] {
     margin-right: 0 !important;
-    margin-left: auto !important;
-  }
-
-  /* Fix for Radix UI scroll lock - prevent position shift */
-  body[data-scroll-locked="1"] {
-    /* Preserve the centering margin */
-    margin-left: auto !important;
-    margin-right: auto !important;
-    /* Let Radix handle padding for scrollbar, but maintain our max-width centering */
-    max-width: 820px !important;
+    padding-right: 0 !important;
   }
 
   /* Optional: Add subtle borders on desktop to emphasize mobile view */
