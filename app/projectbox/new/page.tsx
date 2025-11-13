@@ -47,14 +47,17 @@ export default function NewProject() {
 
     setIsCreating(true);
     try {
-      await createProject(projectName, parsedText, parsedPattern || undefined);
+      const project = await createProject(
+        projectName,
+        parsedText,
+        parsedPattern || undefined,
+      );
       toast.success("Done!");
 
+      // Redirect to the newly created project's detail page
+      router.push(`/projectbox/${project.id}`);
       if (isModal) {
-        router.back();
         setTimeout(() => router.refresh(), 100);
-      } else {
-        router.push("/projectbox");
       }
     } catch (err) {
       console.error("Failed to create proejct:", err);
