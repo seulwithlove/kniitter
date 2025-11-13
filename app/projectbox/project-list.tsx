@@ -13,6 +13,44 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
     router.push(`/projectbox/${projectId}`);
   };
 
+  // TODO: Debug logging - compute progress data before rendering
+  const projectsWithProgress = projects.map((project) => {
+    const totalSteps = getTotalSteps(project.content);
+    const completedSteps = Array.isArray(project.progress)
+      ? project.progress.length
+      : 0;
+
+    // Debug: log projects with 0 steps
+    if (totalSteps === 0) {
+      console.log(`Project "${project.name}" has 0 steps:`, {
+        contentPreview: project.content.substring(0, 200),
+        contentLength: project.content.length,
+        isJSON: (() => {
+          try {
+            const parsed = JSON.parse(project.content);
+            return {
+              yes: true,
+              hasSections: !!parsed.sections,
+              sectionsLength: parsed.sections?.length,
+              hasSteps: !!parsed.steps,
+              stepsLength: parsed.steps?.length,
+            };
+          } catch {
+            return { yes: false };
+          }
+        })(),
+      });
+    }
+
+    return {
+      ...project,
+      progress: {
+        completed: completedSteps,
+        total: totalSteps,
+      },
+    };
+  });
+
   return (
     <div className="container mx-auto max-w-2xl px-4 py-6">
       {/* Header */}
@@ -57,24 +95,15 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
         </div>
       ) : (
         <div className="grid grid-cols-2 gap-4">
-          {projects.map((project) => {
-            const totalSteps = getTotalSteps(project.content);
-            const completedSteps = Array.isArray(project.progress)
-              ? project.progress.length
-              : 0;
-            return (
-              <ProjectCard
-                key={project.id}
-                id={project.id}
-                name={project.name}
-                progress={{
-                  completed: completedSteps,
-                  total: totalSteps,
-                }}
-                onClick={() => handleProjectClick(project.id)}
-              />
-            );
-          })}
+          {projectsWithProgress.map((project) => (
+            <ProjectCard
+              key={project.id}
+              id={project.id}
+              name={project.name}
+              progress={project.progress}
+              onClick={() => handleProjectClick(project.id)}
+            />
+          ))}
 
           {/* Create New Project Card */}
           <Link

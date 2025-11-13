@@ -21,11 +21,12 @@ export function ProjectCard({ id, name, progress, onClick }: ProjectCardProps) {
   const iconVariant = getProjectIconVariant(id);
 
   // Calculate progress percentage
-  const progressPercent = progress
-    ? Math.round((progress.completed / progress.total) * 100)
-    : 0;
+  const progressPercent =
+    progress && progress.total > 0
+      ? Math.round((progress.completed / progress.total) * 100)
+      : 0;
 
-  // console.log(progress);
+  console.log(progress);
 
   return (
     <div className="relative">
