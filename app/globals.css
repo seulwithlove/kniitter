@@ -138,6 +138,24 @@
     --pattern-colorwork-text: #a65ea6;
     --pattern-textured-text: #4a9b85;
     --pattern-custom-text: #8a7a64;
+
+    /* Prevent horizontal scroll */
+    html,
+    body {
+      overflow-x: hidden;
+      width: 100%;
+    }
+
+    /* Prevent layout shift when dialog opens - add this */
+    html {
+      scrollbar-gutter: stable;
+    }
+
+    /* Ensure body stays centered when modal opens */
+    body[data-scroll-locked] {
+      margin-right: 0;
+      padding-right: 0;
+    }
   }
 
   .dark {
