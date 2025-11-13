@@ -2,6 +2,7 @@
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
 import {
   getProjectProgress,
   updateProjectProgress,
@@ -11,6 +12,16 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "./ui/alert-dialog";
 
 type SubStep = {
   order: number;
@@ -39,6 +50,7 @@ export default function PatternViewer({
   const [checkedSteps, setCheckedSteps] = useState<Set<string>>(new Set());
   const [currentRowId, setCurrentRowId] = useState<string | null>(null);
   const currentRowRef = useRef<HTMLDivElement>(null);
+  const [showResetDialog, setShowResetDialog] = useState(false);
 
   // Get all step IDs in order (for navigation - only substeps, not parent headers with substeps)
   const allStepIds: string[] = [];
@@ -151,11 +163,11 @@ export default function PatternViewer({
   };
 
   const handleReset = () => {
-    if (confirm("Do you really want to reset?")) {
-      setCheckedSteps(new Set());
-      localStorage.removeItem(`pattern-progress-${patternId}`);
-      setCurrentRowId(allStepIds[0] || null);
-    }
+    setCheckedSteps(new Set());
+    localStorage.removeItem(`pattern-progress-${patternId}`);
+    setCurrentRowId(allStepIds[0] || null);
+    setShowResetDialog(false);
+    toast.success("Progress has been reset!");
   };
 
   const handlePrevious = () => {
@@ -182,7 +194,11 @@ export default function PatternViewer({
       <CardHeader>
         <div className="flex items-center justify-between">
           <CardTitle>Patterns</CardTitle>
-          <Button variant="ghost" size="sm" onClick={handleReset}>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setShowResetDialog(true)}
+          >
             Reset
           </Button>
         </div>
@@ -333,6 +349,23 @@ export default function PatternViewer({
           </Button>
         </div>
       </CardContent>
+
+      {/* Reset Confirmation Dialog */}
+      <AlertDialog open={showResetDialog} onOpenChange={setShowResetDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Reset Progress?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will clear all your progress for this pattern. This action
+              cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleReset}>Reset</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </Card>
   );
 }
