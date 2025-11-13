@@ -38,11 +38,11 @@ export function ProjectCard({ id, name, progress, onClick }: ProjectCardProps) {
         }}
       >
         {/* Geometric icon in center */}
-        <div className="flex h-full flex-col items-center justify-center pb-16">
+        <div className="flex h-full flex-col items-center justify-center pb-5">
           <ProjectIcon
             variant={iconVariant}
             size={80}
-            className="pb-5 opacity-80 transition-transform duration-300 group-hover:scale-110"
+            className="pb-2 opacity-80 transition-transform duration-300 group-hover:scale-110"
             style={{
               color: `var(--pattern-${color.name}-text)`,
             }}
@@ -59,10 +59,10 @@ export function ProjectCard({ id, name, progress, onClick }: ProjectCardProps) {
         </div>
 
         {/* Project title at bottom */}
-        <div className="absolute right-0 bottom-0 left-0 px-4 pb-4">
+        <div className="absolute right-0 bottom-0 left-0 px-4">
           {/* Progress bar and percentage */}
           {progress && progress.total >= 0 && (
-            <div className="mt-2 space-y-1">
+            <div className="space-y-1">
               <div className="flex items-center justify-between text-xs">
                 <span
                   className="opacity-75"
