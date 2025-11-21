@@ -37,13 +37,12 @@ export function parseBanulPattern(text: string): Step[] {
     "제작시 구성",
     "사이즈",
     "가슴둘레",
-    "주의이",
+    "주의",
     "실 사용량",
     "사용 바늘",
     "게이지",
     "진행과정",
     "약어 및 용어",
-    "사슴으로 읽는 법",
   ];
 
   let inMetadataSection = true;

@@ -1,7 +1,5 @@
 "use client"; //TODO: client component 분리
 
-import { notFound } from "next/navigation";
-import { use, useEffect, useState } from "react";
 import PatternViewer from "@/components/pattern-viewer";
 import SizeSelector from "@/components/size-selector";
 import { Badge } from "@/components/ui/badge";
@@ -9,6 +7,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import type { ParsedPattern } from "@/lib/parser/caidree-pattern-parser";
 import { applySize } from "@/lib/parser/size-pattern-recognizer";
+import { notFound } from "next/navigation";
+import { use, useEffect, useState } from "react";
 import { getProjectById } from "../project.action";
 
 // Convert ParsedPattern to PatternViewer format with size transformation
@@ -257,7 +257,7 @@ export default function Pattern({
         </CardHeader>
         <CardContent>
           <pre className="whitespace-pre-wrap font-mono text-base leading-relaxed">
-            {project.content}
+            {pattern?.originalText || project.content}
           </pre>
         </CardContent>
       </Card>

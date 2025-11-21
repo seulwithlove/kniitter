@@ -244,6 +244,11 @@ function parseSections(text: string): PatternSection[] {
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i].trim();
 
+    // Ignore page numbers (e.g., "-- 7 of 13 --")
+    if (line.match(/^--\s*\d+\s*of\s*\d+\s*--$/i)) {
+      continue;
+    }
+
     // Check if line is a section header
     const isHeader = sectionHeaders.some(
       (header) =>
@@ -315,9 +320,11 @@ function parseSteps(text: string): Step[] {
   for (const line of lines) {
     const trimmed = line.trim();
 
-    // Detect numbered steps
+    // Detect numbered steps or checkbox steps
     const stepMatch = trimmed.match(/^(\d+)\.\s+(.+)/);
-    if (stepMatch) {
+    const checkboxMatch = trimmed.match(/^\[\s*[xX]?\s*\]\s*(.+)/) || trimmed.match(/^[O0]\s+(.+)/);
+
+    if (stepMatch || checkboxMatch) {
       if (currentStep) {
         steps.push(currentStep);
       }
@@ -325,7 +332,7 @@ function parseSteps(text: string): Step[] {
       stepOrder++;
       currentStep = {
         order: stepOrder,
-        content: stepMatch[2],
+        content: stepMatch ? stepMatch[2] : (checkboxMatch ? checkboxMatch[1] : trimmed),
       };
       continue;
     }
@@ -336,6 +343,10 @@ function parseSteps(text: string): Step[] {
       trimmed.length > 0 &&
       !trimmed.match(/^(Row|Round|Size)/)
     ) {
+      // If it looks like a new instruction but without a number/checkbox, maybe treat it as a new step?
+      // For now, append, but respect "one direction" rule if possible.
+      // If the previous line ended with a period, and this one starts with a capital letter, it might be a new sentence.
+      // But usually "one direction" implies one visual block.
       currentStep.content += ` ${trimmed}`;
     }
   }
