@@ -7,6 +7,7 @@ export default function FolderIcon() {
   const pathname = usePathname();
   const isProjectBoxPage = pathname === "/projectbox";
 
+  console.log("nav bar!");
   return isProjectBoxPage ? (
     <FolderOpenIcon className="h-6 w-6" />
   ) : (

@@ -48,7 +48,7 @@ export default function RootLayout({
         >
           <AlerterProvider>
             <div className="flex h-screen flex-col">
-              <header className="sticky top-0 z-50 flex justify-between border-black/5 border-b bg-background/80 px-6 py-4 backdrop-blur-sm supports-[backdrop-filter]:bg-background/80 dark:border-white/5">
+              <header className="sticky top-0 z-50 flex justify-between border-black/5 border-b bg-background px-6 py-4 backdrop-blur-sm supports-[backdrop-filter]:bg-background/95 dark:border-white/5">
                 <Link
                   href="/"
                   className="flex items-center truncate font-light text-3xl tracking-tight transition-opacity hover:opacity-70"
