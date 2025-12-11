@@ -18,7 +18,7 @@
 - **Header Area**: 앱 타이틀, 뒤로가기 버튼
 - **Content Grid**: 2열 카드 레이아웃
 - **Card System**: 각 프로젝트를 카드로 표시
-- **Mobile-first**: 스마트폰 최적화 디자인
+- **Mobile-first**: 아이패드 최적화 디자인
 
 #### Pattern Reader Screen Layout
 - **Header**: 패턴 제목, 진행률 표시
@@ -29,8 +29,6 @@
 ### 2.2 Color Palette (참고 이미지 기반)
 
 #### Primary Colors
-- **Light Blue** (#ADD8E6): 기본 패턴, 평편뜨기
-- **Purple** (#DA70D6): 무늬뜨기, 복잡한 패턴
 - **Beige** (#F5E6D3): 완료된 섹션
 - **Orange** (#FF8C42): 중요 표시, 주의 필요한 줄
 - **Mint** (#B2E8D8): 반복 구간
@@ -334,7 +332,7 @@ Current: 45 / 120
 1. 패턴 카드 선택
 2. 이전 작업 위치에서 재개
 3. 현재 줄 읽기
-4. 뜨개질 작업 수행
+4. 뜨개 작업 수행
 5. 체크박스 탭하여 완료 표시
 6. 자동으로 다음 줄로 이동
 7. 반복
