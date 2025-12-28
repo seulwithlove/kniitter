@@ -4,17 +4,16 @@ generator client {
 }
 
 datasource db {
-  provider          = "mysql"
-  url               = env("DATABASE_URL")
-  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model Project {
-  id          Int      @id @default(autoincrement()) @db.UnsignedInt
+  id          Int      @id @default(autoincrement())
   createdAt   DateTime @default(now()) @db.Timestamp(0)
   updatedAt   DateTime @default(now()) @updatedAt @db.Timestamp(0)
   name        String   @db.VarChar(225)
-  content     String   @db.LongText
+  content     String   @db.Text
   isCompleted Boolean  @default(false)
   progress    Json?
 }
