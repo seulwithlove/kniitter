@@ -1,23 +1,17 @@
 services:
   localdb:
     container_name: kniitter
-    image: mysql:8.0
+    image: postgres:16-alpine
     ports:
-      - 3312:3306
-    expose:
-      - 3312
+      - 5432:5432
     environment:
-      MYSQL_ROOT_PASSWORD: My@Kniit
-      MYSQL_DATABASE: knitdb
-    command:
-      - --character-set-server=utf8mb4
-      - --collation-server=utf8mb4_unicode_ci
-      - --log_bin_trust_function_creators=1
-      - --default-time-zone=Asia/Seoul
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: My@Kniit
+      POSTGRES_DB: knitdb
+      TZ: Asia/Seoul
 
     volumes:
-      # - ./mysql:/var/lib/mysql
-      - mysql-data:/var/lib/mysql
+      - postgres-data:/var/lib/postgresql/data
 
 volumes:
-  mysql-data:
+  postgres-data:
