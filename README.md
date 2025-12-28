@@ -2,6 +2,8 @@
 
 > A minimalist app for tracking knitting patterns with size-specific instructions and progress checkboxes
 
+[Live site](https://kniitter.vercel.app/)
+
 [![Next.js](https://img.shields.io/badge/Next.js-15.5.4-black?style=flat-square&logo=next.js)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19.1.0-blue?style=flat-square&logo=react)](https://reactjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)](https://www.typescriptlang.org/)
@@ -36,21 +38,13 @@
 
 ### Backend
 - **Framework**: Next.js API Routes
-- **Database**: MySQL + Prisma ORM
+- **Database**: PostgreSQL (Vercel Postgres) + Prisma ORM
+- **Deployment**: Vercel
 
 ### Development Tools
 - **Code Quality**: Biome (Linter & Formatter)
-- **Container**: Docker Compose
+- **Container**: Docker Compose (optional, for local Postgres)
 - **Package Manager**: pnpm
-
-## 🚀 Quick Start
-
-```bash
-pnpm install
-pnpm dev
-```
-
-Open [http://localhost:3000](http://localhost:3000)
 
 ## 🎯 Use Case
 
